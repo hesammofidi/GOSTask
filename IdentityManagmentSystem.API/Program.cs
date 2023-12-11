@@ -10,8 +10,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.ConfigurePersistenceServices(builder.Configuration);
-//builder.Services.AddIdentityServices(builder.Configuration);
+//builder.Services.ConfigurePersistenceServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.ConfigureApplicationCookie(option =>
 {

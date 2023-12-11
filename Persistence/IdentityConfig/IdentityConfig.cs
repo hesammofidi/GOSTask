@@ -1,6 +1,7 @@
 ﻿using Application.Contract.Identity;
 using Application.Models.IdentityModels;
 using Domain.Users;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,7 @@ namespace Persistence.IdentityConfig
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
            .AddJwtBearer(o =>
            {
@@ -54,7 +56,16 @@ namespace Persistence.IdentityConfig
                    ValidAudience = configuration["JwtSettings:Audience"],
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
                };
-           });
+           })
+           .AddCookie("Identity.Application", options =>
+           {
+               options.Cookie.HttpOnly = true;
+               options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+               options.LoginPath = "/Account/Login";
+               options.AccessDeniedPath = "/Account/AccessDenied";
+               options.SlidingExpiration = true;
+           }); ;
+
 
             services.Configure<IdentityOptions>(option =>
             {
