@@ -1,4 +1,6 @@
 
+using Domain.Users;
+using Infrastructure;
 using Microsoft.OpenApi.Models;
 using Persistence;
 using Persistence.IdentityConfig;
@@ -11,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //builder.Services.ConfigurePersistenceServices(builder.Configuration);
+builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.ConfigureApplicationCookie(option =>
@@ -28,7 +31,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
 }
 
 app.UseHttpsRedirection();
@@ -36,7 +42,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapIdentityApi<User>();
 app.Run();
 void AddSwagger(IServiceCollection services)
 {
@@ -74,7 +80,7 @@ void AddSwagger(IServiceCollection services)
         o.SwaggerDoc("v1", new OpenApiInfo()
         {
             Version = "v1",
-            Title = "HR Management Api"
+            Title = "My API"
         });
     });
 }

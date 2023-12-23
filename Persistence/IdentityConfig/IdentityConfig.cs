@@ -35,36 +35,39 @@ namespace Persistence.IdentityConfig
                .AddEntityFrameworkStores<IdentityDatabaseContext>()
                .AddSignInManager()
                .AddErrorDescriber<CustomIdentityErrors>()
-               .AddDefaultTokenProviders();
+               .AddDefaultTokenProviders()
+               .AddApiEndpoints();
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
-           .AddJwtBearer(o =>
-           {
-               o.TokenValidationParameters = new TokenValidationParameters
-               {
-                   ValidateIssuerSigningKey = true,
-                   ValidateIssuer = true,
-                   ValidateAudience = true,
-                   ValidateLifetime = true,
-                   ClockSkew = TimeSpan.Zero,
-                   ValidIssuer = configuration["JwtSettings:Issuer"],
-                   ValidAudience = configuration["JwtSettings:Audience"],
-                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
-               };
-           })
-           .AddCookie("Identity.Application", options =>
-           {
-               options.Cookie.HttpOnly = true;
-               options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-               options.LoginPath = "/Account/Login";
-               options.AccessDeniedPath = "/Account/AccessDenied";
-               options.SlidingExpiration = true;
-           }); ;
+            services.AddAuthentication()
+                .AddBearerToken(IdentityConstants.BearerScheme);
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //})
+            //.AddJwtBearer(o =>
+            //{
+            //    o.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuerSigningKey = true,
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidateLifetime = true,
+            //        ClockSkew = TimeSpan.Zero,
+            //        ValidIssuer = configuration["JwtSettings:Issuer"],
+            //        ValidAudience = configuration["JwtSettings:Audience"],
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
+            //    };
+            //})
+            //.AddCookie("Identity.Application", options =>
+            //{
+            //    options.Cookie.HttpOnly = true;
+            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+            //    options.LoginPath = "/Account/Login";
+            //    options.AccessDeniedPath = "/Account/AccessDenied";
+            //    options.SlidingExpiration = true;
+            //});
 
 
             services.Configure<IdentityOptions>(option =>

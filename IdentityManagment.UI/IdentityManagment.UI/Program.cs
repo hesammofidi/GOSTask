@@ -1,5 +1,7 @@
+using IdentityManagement.UI.Services.Contract;
 using IdentityManagment.UI.Client.Pages;
 using IdentityManagment.UI.Components;
+using IdentityManagment.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpClient("AuthenticationAPI", options =>
+{
+    options.BaseAddress = new Uri("http://localhost:5013/");
+});
 
 var app = builder.Build();
 
