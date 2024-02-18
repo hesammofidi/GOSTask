@@ -22,6 +22,548 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Permisions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("InsertTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RemoveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.ToTable("Permission");
+                });
+
+            modelBuilder.Entity("Domain.SystemPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("InsertTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PermisionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("RemoveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("SystemsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("systemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermisionsId");
+
+                    b.HasIndex("SystemsId");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.HasIndex("systemId");
+
+                    b.HasIndex("PermissionId", "systemId")
+                        .IsUnique();
+
+                    b.ToTable("SystemPermission");
+                });
+
+            modelBuilder.Entity("Domain.SystemRoleUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DomainUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("InsertTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RemoveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RolesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("SystemsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("systemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("usersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DomainUserId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("RolesId");
+
+                    b.HasIndex("SystemsId");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.HasIndex("usersId");
+
+                    b.HasIndex("systemId", "RoleId", "usersId")
+                        .IsUnique()
+                        .HasFilter("[RoleId] IS NOT NULL AND [usersId] IS NOT NULL");
+
+                    b.ToTable("SystemRoleUser");
+                });
+
+            modelBuilder.Entity("Domain.SystemRoles", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("InsertTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RemoveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RolesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("SystemsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("systemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RolesId");
+
+                    b.HasIndex("SystemsId");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.HasIndex("systemId");
+
+                    b.HasIndex("RoleId", "systemId")
+                        .IsUnique()
+                        .HasFilter("[RoleId] IS NOT NULL");
+
+                    b.ToTable("SystemRoles");
+                });
+
+            modelBuilder.Entity("Domain.SystemRolesPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("InsertTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PermisionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PermissionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RemoveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RolesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SystemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SystemPermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SystemRolesId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SystemsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("systemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermisionsId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("RolesId");
+
+                    b.HasIndex("SystemPermissionId");
+
+                    b.HasIndex("SystemRolesId");
+
+                    b.HasIndex("SystemsId");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.HasIndex("systemId");
+
+                    b.HasIndex("PermissionId", "systemId", "RoleId")
+                        .IsUnique()
+                        .HasFilter("[RoleId] IS NOT NULL");
+
+                    b.ToTable("SystemRolesPermission");
+                });
+
+            modelBuilder.Entity("Domain.SystemUserPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DomainUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("InsertTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PermisionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PermissionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RemoveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SystemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SystemsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("systemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("usersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DomainUserId");
+
+                    b.HasIndex("PermisionsId");
+
+                    b.HasIndex("SystemsId");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.HasIndex("systemId");
+
+                    b.HasIndex("usersId");
+
+                    b.HasIndex("PermissionId", "systemId", "usersId")
+                        .IsUnique()
+                        .HasFilter("[usersId] IS NOT NULL");
+
+                    b.ToTable("SystemUserPermission");
+                });
+
+            modelBuilder.Entity("Domain.SystemUserRolePermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DomainUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("InsertTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PermisionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PermissionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RemoveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RolesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SystemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SystemRolesId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SystemsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("systemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("usersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DomainUserId");
+
+                    b.HasIndex("PermisionsId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("RolesId");
+
+                    b.HasIndex("SystemRolesId");
+
+                    b.HasIndex("SystemsId");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.HasIndex("systemId");
+
+                    b.HasIndex("usersId");
+
+                    b.HasIndex("PermissionId", "systemId", "RoleId", "usersId")
+                        .IsUnique()
+                        .HasFilter("[RoleId] IS NOT NULL AND [usersId] IS NOT NULL");
+
+                    b.ToTable("SystemUserRolePermission");
+                });
+
+            modelBuilder.Entity("Domain.Systems", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("InsertTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RemoveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.ToTable("Systems");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<string>", b =>
                 {
                     b.Property<string>("Id")
@@ -185,18 +727,6 @@ namespace Persistence.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.ToTable("UserRoles", "identity");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "982bb98e-60e7-4eaa-adff-981b432b0a34",
-                            RoleId = "c02facf2-bb3e-4f0c-b503-1c904b429e22"
-                        },
-                        new
-                        {
-                            UserId = "e4651308-6b8d-4514-8bc4-c4cf3f75a925",
-                            RoleId = "30b54ae3-5c16-4ee4-8c87-9200ea8a8901"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -223,25 +753,14 @@ namespace Persistence.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole<string>");
 
                     b.HasDiscriminator().HasValue("IdentityRole");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c02facf2-bb3e-4f0c-b503-1c904b429e22",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "30b54ae3-5c16-4ee4-8c87-9200ea8a8901",
-                            Name = "Basicuser",
-                            NormalizedName = "BASICUSER"
-                        });
                 });
 
-            modelBuilder.Entity("Domain.Users.User", b =>
+            modelBuilder.Entity("Domain.Users.DomainUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser<string>");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
@@ -252,49 +771,326 @@ namespace Persistence.Migrations
                     b.Property<bool?>("IsRemoved")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("RemoveTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("UpdateTime")
                         .HasColumnType("datetime2");
 
-                    b.HasDiscriminator().HasValue("User");
+                    b.HasDiscriminator().HasValue("DomainUser");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "982bb98e-60e7-4eaa-adff-981b432b0a34",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "3a27f8b1-862c-4923-82aa-eab549cb1312",
-                            Email = "mofidihesam8@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MOFIDIHESAM8@GMAIL.COM",
-                            NormalizedUserName = "MOFIDIHESAM8@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEO7QpuPt/IY43KU/mMl4EAwlZFL8Zc9Gg/qrJxZZjHDM7M+kxxZ4hcv7I493baiJGA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "341fa197-55ac-44ea-a4db-39d39d227792",
-                            TwoFactorEnabled = false,
-                            UserName = "mofidihesam8@gmail.com",
-                            FullName = "HesamMofidi1"
-                        },
-                        new
-                        {
-                            Id = "e4651308-6b8d-4514-8bc4-c4cf3f75a925",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "081f2507-aad5-4749-b050-9201584b3687",
-                            Email = "mofidihessam@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MOFIDIHESSAM@GMAIL.COM",
-                            NormalizedUserName = "MOFIDIHESSAM@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAED7HtUZ2KwbWZTTQhfGTeh6cW0haM2y/bxd1/qHo6w3kP1h4CNXuMVDnx5T+td7gqg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "478a1998-525f-46b5-907d-eb4d4476f87f",
-                            TwoFactorEnabled = false,
-                            UserName = "mofidihessam@gmail.com",
-                            FullName = "HesamMofidi1"
-                        });
+            modelBuilder.Entity("Domain.Roles", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("InsertTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RemoveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasDiscriminator().HasValue("Roles");
+                });
+
+            modelBuilder.Entity("Domain.SystemPermission", b =>
+                {
+                    b.HasOne("Domain.Permisions", null)
+                        .WithMany("SystemPermision")
+                        .HasForeignKey("PermisionsId");
+
+                    b.HasOne("Domain.Permisions", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Systems", null)
+                        .WithMany("SystemPermission")
+                        .HasForeignKey("SystemsId");
+
+                    b.HasOne("Domain.Systems", "System")
+                        .WithMany()
+                        .HasForeignKey("systemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("System");
+                });
+
+            modelBuilder.Entity("Domain.SystemRoleUser", b =>
+                {
+                    b.HasOne("Domain.Users.DomainUser", null)
+                        .WithMany("SystemRoleUser")
+                        .HasForeignKey("DomainUserId");
+
+                    b.HasOne("Domain.Roles", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Roles", null)
+                        .WithMany("SystemRoleUser")
+                        .HasForeignKey("RolesId");
+
+                    b.HasOne("Domain.Systems", null)
+                        .WithMany("SystemRoleUser")
+                        .HasForeignKey("SystemsId");
+
+                    b.HasOne("Domain.Systems", "System")
+                        .WithMany()
+                        .HasForeignKey("systemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Users.DomainUser", "users")
+                        .WithMany()
+                        .HasForeignKey("usersId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Role");
+
+                    b.Navigation("System");
+
+                    b.Navigation("users");
+                });
+
+            modelBuilder.Entity("Domain.SystemRoles", b =>
+                {
+                    b.HasOne("Domain.Roles", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Roles", null)
+                        .WithMany("SystemRole")
+                        .HasForeignKey("RolesId");
+
+                    b.HasOne("Domain.Systems", null)
+                        .WithMany("SystemRole")
+                        .HasForeignKey("SystemsId");
+
+                    b.HasOne("Domain.Systems", "System")
+                        .WithMany()
+                        .HasForeignKey("systemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("System");
+                });
+
+            modelBuilder.Entity("Domain.SystemRolesPermission", b =>
+                {
+                    b.HasOne("Domain.Permisions", null)
+                        .WithMany("SystemRolesPermission")
+                        .HasForeignKey("PermisionsId");
+
+                    b.HasOne("Domain.Permisions", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Roles", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Roles", null)
+                        .WithMany("SystemRolesPermission")
+                        .HasForeignKey("RolesId");
+
+                    b.HasOne("Domain.SystemPermission", null)
+                        .WithMany("SystemRolesPermission")
+                        .HasForeignKey("SystemPermissionId");
+
+                    b.HasOne("Domain.SystemRoles", null)
+                        .WithMany("SystemRolesPermission")
+                        .HasForeignKey("SystemRolesId");
+
+                    b.HasOne("Domain.Systems", null)
+                        .WithMany("SystemRolesPermission")
+                        .HasForeignKey("SystemsId");
+
+                    b.HasOne("Domain.Systems", "System")
+                        .WithMany()
+                        .HasForeignKey("systemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("System");
+                });
+
+            modelBuilder.Entity("Domain.SystemUserPermission", b =>
+                {
+                    b.HasOne("Domain.Users.DomainUser", null)
+                        .WithMany("SystemUserPermission")
+                        .HasForeignKey("DomainUserId");
+
+                    b.HasOne("Domain.Permisions", null)
+                        .WithMany("SystemUserPermission")
+                        .HasForeignKey("PermisionsId");
+
+                    b.HasOne("Domain.Permisions", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Systems", null)
+                        .WithMany("SystemUserPermission")
+                        .HasForeignKey("SystemsId");
+
+                    b.HasOne("Domain.Systems", "System")
+                        .WithMany()
+                        .HasForeignKey("systemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Users.DomainUser", "users")
+                        .WithMany()
+                        .HasForeignKey("usersId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("System");
+
+                    b.Navigation("users");
+                });
+
+            modelBuilder.Entity("Domain.SystemUserRolePermission", b =>
+                {
+                    b.HasOne("Domain.Users.DomainUser", null)
+                        .WithMany("SystemUserRolePermission")
+                        .HasForeignKey("DomainUserId");
+
+                    b.HasOne("Domain.Permisions", null)
+                        .WithMany("SystemUserRolePermission")
+                        .HasForeignKey("PermisionsId");
+
+                    b.HasOne("Domain.Permisions", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Roles", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Roles", null)
+                        .WithMany("SystemUserRolePermission")
+                        .HasForeignKey("RolesId");
+
+                    b.HasOne("Domain.SystemRoles", null)
+                        .WithMany("SystemUserRolePermission")
+                        .HasForeignKey("SystemRolesId");
+
+                    b.HasOne("Domain.Systems", null)
+                        .WithMany("SystemUserRolePermission")
+                        .HasForeignKey("SystemsId");
+
+                    b.HasOne("Domain.Systems", "System")
+                        .WithMany()
+                        .HasForeignKey("systemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Users.DomainUser", "users")
+                        .WithMany()
+                        .HasForeignKey("usersId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("System");
+
+                    b.Navigation("users");
+                });
+
+            modelBuilder.Entity("Domain.Permisions", b =>
+                {
+                    b.Navigation("SystemPermision");
+
+                    b.Navigation("SystemRolesPermission");
+
+                    b.Navigation("SystemUserPermission");
+
+                    b.Navigation("SystemUserRolePermission");
+                });
+
+            modelBuilder.Entity("Domain.SystemPermission", b =>
+                {
+                    b.Navigation("SystemRolesPermission");
+                });
+
+            modelBuilder.Entity("Domain.SystemRoles", b =>
+                {
+                    b.Navigation("SystemRolesPermission");
+
+                    b.Navigation("SystemUserRolePermission");
+                });
+
+            modelBuilder.Entity("Domain.Systems", b =>
+                {
+                    b.Navigation("SystemPermission");
+
+                    b.Navigation("SystemRole");
+
+                    b.Navigation("SystemRoleUser");
+
+                    b.Navigation("SystemRolesPermission");
+
+                    b.Navigation("SystemUserPermission");
+
+                    b.Navigation("SystemUserRolePermission");
+                });
+
+            modelBuilder.Entity("Domain.Users.DomainUser", b =>
+                {
+                    b.Navigation("SystemRoleUser");
+
+                    b.Navigation("SystemUserPermission");
+
+                    b.Navigation("SystemUserRolePermission");
+                });
+
+            modelBuilder.Entity("Domain.Roles", b =>
+                {
+                    b.Navigation("SystemRole");
+
+                    b.Navigation("SystemRoleUser");
+
+                    b.Navigation("SystemRolesPermission");
+
+                    b.Navigation("SystemUserRolePermission");
                 });
 #pragma warning restore 612, 618
         }

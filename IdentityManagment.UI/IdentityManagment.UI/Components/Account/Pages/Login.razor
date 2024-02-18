@@ -1,8 +1,10 @@
-﻿@page "/"
-
+﻿@page "/Login"
+@attribute [AllowAnonymous]
 @using IdentityManagment.UI.Models.IdentityModels
 @using IdentityManagement.UI.Services.Contract
+@using Microsoft.AspNetCore.Authorization
 @inject IAuthService _authenticationService
+@inject NavigationManager NavigationManager
 <PageTitle>Log in</PageTitle>
 @* <h1>Log in</h1>@**@
 <h5>@errorMessage</h5> 
@@ -118,13 +120,17 @@
     private string? errorMessage;
     [SupplyParameterFromForm]
     private LoginRequestDto Input { get; set; } = new();
-
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
     private async Task LoginUser()
     {
         try
         {
-            var loginresponse =  await _authenticationService.LoginUser(Input);
-            errorMessage = loginresponse.AccessToken;
+            // var loginresponse = await _authenticationService.LoginUser(Input);
+            // errorMessage = loginresponse.AccessToken;
+             await _authenticationService.LoginAsync(Input);
+            NavigationManager.NavigateTo(ReturnUrl);
+            
         }
         catch
         {

@@ -24,14 +24,14 @@ namespace Persistence.IdentityServices
     {
         #region Ctor
         private readonly JwtSettings _jwtSettings;
-        private readonly IEmailSender<User> _sendEmail;
-        private readonly UserManager<User> _usermanager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly IEmailSender<DomainUser> _sendEmail;
+        private readonly UserManager<DomainUser> _usermanager;
+        private readonly SignInManager<DomainUser> _signInManager;
         private readonly ILogger<AuthService> _logger;
         public AuthService(IOptions<JwtSettings> jwtSettings,
-            UserManager<User> usermanager,
-            SignInManager<User> signInManager,
-            IEmailSender<User> sendEmail,
+            UserManager<DomainUser> usermanager,
+            SignInManager<DomainUser> signInManager,
+            IEmailSender<DomainUser> sendEmail,
             ILogger<AuthService> logger)
         {
             _jwtSettings = jwtSettings.Value;
@@ -75,119 +75,119 @@ namespace Persistence.IdentityServices
             await _sendEmail.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
         }
 
+        #region Login
+        public async Task<AuthResponse> LoginAsync(AuthRequest request)
+        {
+            var user = await _usermanager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                throw new Exception($"user with {request.Email} not fount.");
+            }
+            var result = await _signInManager
+                         .PasswordSignInAsync(user.UserName, request.Password, request.IsPersistant, true);
+            if (!result.Succeeded)
+            {
+                throw new Exception($"credentials for {request.Email} arent valid.");
+            }
+
+            JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
+
+            AuthResponse response = new AuthResponse()
+            {
+                Id = user.Id,
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                Email = user.Email,
+            };
+            //string resetCode = "123456";
+            //await _sendEmail.SendPasswordResetCodeAsync(user, user.Email, resetCode);
+            return response;
+
+        }
+        private async Task<JwtSecurityToken> GenerateToken(DomainUser user)
+        {
+            var userClaims = await _usermanager.GetClaimsAsync(user);
+            var roles = await _usermanager.GetRolesAsync(user);
+
+            var roleClaims = new List<Claim>();
+            for (int i = 0; i < roles.Count; i++)
+            {
+                roleClaims.Add(new Claim(ClaimTypes.Role, roles[i]));
+            }
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(CustomClaimTypes.Uid, user.Id)
+                    //new Claim(ClaimTypes.Role,"Admin")
+            }
+            .Union(userClaims)
+            .Union(roleClaims);
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+            var jwtSecurityToken = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
+                signingCredentials: signingCredentials);
+
+            return jwtSecurityToken;
+        }
+        #endregion
+
+        #region Register
+        public async Task<RegistrationResponse> RegisterAsync(RegistrationRequest request)
+        {
+            //    //var existingUser = await _usermanager.FindByNameAsync(request.UserName);
+            //    //if (existingUser != null)
+            //    //{
+            //    //    throw new Exception($"user name '{request.UserName}' already exists.");
+            //    //}
+
+            //    //var user = new User
+            //    //{
+            //    //    Email = request.Email,
+            //    //    FullName = request.FullName,
+
+            //    //    UserName = request.UserName,
+            //    //    EmailConfirmed = true
+            //    //};
+
+            var existingEmail = await _usermanager.FindByEmailAsync(request.Email);
+            if (existingEmail == null)
+            {
+
+                var user = new DomainUser
+                {
+                    Email = request.Email,
+                    FullName = request.Email,
+
+                    UserName = request.Email,
+                    EmailConfirmed = true
+                };
+
+                var result = await _usermanager.CreateAsync(user, request.Password);
+
+                if (result.Succeeded)
+                {
+                    await _usermanager.AddToRoleAsync(user, "Basicuser");
+                    return new RegistrationResponse() { UserId = user.Id };
+                }
+                else
+                {
+                    throw new Exception($"{result.Errors}");
+                }
+            }
+            else
+            {
+                throw new Exception($"Email '{request.Email}' already exists.");
+            }
+        }
+
+        #endregion                          
+
     }
 }
 
-//#region Login
-//public async Task<AuthResponse> LoginAsync(AuthRequest request)
-//{
-//    var user = await _usermanager.FindByEmailAsync(request.Email);
-//    if (user == null)
-//    {
-//        throw new Exception($"user with {request.Email} not fount.");
-//    }
-//    var result = await _signInManager
-//                 .PasswordSignInAsync(user.UserName, request.Password,request.IsPersistant,true);
-//    if (!result.Succeeded)
-//    {
-//        throw new Exception($"credentials for {request.Email} arent valid.");
-//    }
-
-//    JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
-
-//    AuthResponse response = new AuthResponse()
-//    {
-//        Id = user.Id,
-//        Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-//        Email = user.Email,
-
-
-//    };
-//    string resetCode = "123456";
-//    await _sendEmail.SendPasswordResetCodeAsync(user, user.Email, resetCode);
-//    return response;
-
-//}
-//private async Task<JwtSecurityToken> GenerateToken(User user)
-//{
-//    var userClaims = await _usermanager.GetClaimsAsync(user);
-//    var roles = await _usermanager.GetRolesAsync(user);
-
-//    var roleClaims = new List<Claim>();
-//    for (int i = 0; i < roles.Count; i++)
-//    {
-//        roleClaims.Add(new Claim(ClaimTypes.Role, roles[i]));
-//    }
-
-//    var claims = new[]
-//    {
-//        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-//        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-//            new Claim(CustomClaimTypes.Uid, user.Id)
-//    }
-//    .Union(userClaims)
-//    .Union(roleClaims);
-//    var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-//    var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
-
-//    var jwtSecurityToken = new JwtSecurityToken(
-//        issuer: _jwtSettings.Issuer,
-//        audience: _jwtSettings.Audience,
-//        claims: claims,
-//        expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
-//        signingCredentials: signingCredentials);
-
-//    return jwtSecurityToken;
-//}
-//#endregion
-
-//#region Register
-//public async Task<RegistrationResponse> RegisterAsync(RegistrationRequest request)
-//{
-//    //    //var existingUser = await _usermanager.FindByNameAsync(request.UserName);
-//    //    //if (existingUser != null)
-//    //    //{
-//    //    //    throw new Exception($"user name '{request.UserName}' already exists.");
-//    //    //}
-
-//    //    //var user = new User
-//    //    //{
-//    //    //    Email = request.Email,
-//    //    //    FullName = request.FullName,
-
-//    //    //    UserName = request.UserName,
-//    //    //    EmailConfirmed = true
-//    //    //};
-
-//    var existingEmail = await _usermanager.FindByEmailAsync(request.Email);
-//    if (existingEmail == null)
-//    {
-
-//        var user = new User
-//        {
-//            Email = request.Email,
-//            FullName = request.FullName,
-
-//            UserName = request.Email,
-//            EmailConfirmed = true
-//        };
-
-//        var result = await _usermanager.CreateAsync(user, request.Password);
-
-//        if (result.Succeeded)
-//        {
-//            await _usermanager.AddToRoleAsync(user, "Basicuser");
-//            return new RegistrationResponse() { UserId = user.Id };
-//        }
-//        else
-//        {
-//            throw new Exception($"{result.Errors}");
-//        }
-//    }
-//    else
-//    {
-//        throw new Exception($"Email '{request.Email}' already exists.");
-//    }
-//}
-
-//#endregion                          

@@ -9,8 +9,8 @@ namespace Application.Contract.Identity
 {
     public interface IAuthService
     {
-        //Task<AuthResponse> LoginAsync(AuthRequest request);
-        //Task<RegistrationResponse> RegisterAsync(RegistrationRequest request);
+        Task<AuthResponse> LoginAsync(AuthRequest request);
+        Task<RegistrationResponse> RegisterAsync(RegistrationRequest request);
         Task ForgotPasswordAsync(ForgetPassDto request);
     }
 }

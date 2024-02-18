@@ -1,4 +1,5 @@
-﻿using Domain.Attributes;
+﻿using Domain;
+using Domain.Attributes;
 using Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,25 +14,38 @@ using System.Threading.Tasks;
 
 namespace Persistence.Contexts
 {
-        public class IdentityDatabaseContext : IdentityDbContext<User>
+        public class IdentityDatabaseContext : IdentityDbContext<DomainUser>
         {
             public IdentityDatabaseContext(DbContextOptions<IdentityDatabaseContext> options)
                 : base(options)
             {
 
             }
-        
+        public DbSet<Systems> Systems { get; set; }
+        public DbSet<Permisions> Permission { get; set; }
+        public DbSet<SystemRoles> SystemRoles { get; set; }
+        public DbSet<SystemPermission> SystemPermission { get; set; }
+        public DbSet<SystemRolesPermission> SystemRolesPermission { get; set; }
+        public DbSet<SystemUserPermission> SystemUserPermission { get; set; }
+        public DbSet<SystemRoleUser> SystemRoleUser { get; set; }
+        public DbSet<SystemUserRolePermission> SystemUserRolePermission { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
             //ApplyConfigs
-
             builder.ApplyConfiguration(new RoleConfig());
             builder.ApplyConfiguration(new UserConfig());
-            builder.ApplyConfiguration(new UserRoleConfig());
+            //builder.ApplyConfiguration(new UserRoleConfig());
+            builder.ApplyConfiguration(new SystemsConfig());
+            builder.ApplyConfiguration(new PermissionConfigs());
+            builder.ApplyConfiguration(new SystemRolesConfig());
+            builder.ApplyConfiguration(new SystemPermissionConfig());
+            builder.ApplyConfiguration(new SystemUserPermissionConfigs());
+            builder.ApplyConfiguration(new SystemRolesUserConfigs());
+            builder.ApplyConfiguration(new SystemRolesPermissionConfigs());
+            builder.ApplyConfiguration(new SystemUserRolePermissionConfig());
 
-            //Tables
+            //EnitityTables
             builder.Entity<IdentityUser<string>>().ToTable("Users", "identity");
             builder.Entity<IdentityRole<string>>().ToTable("Roles", "identity");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims", "identity");
@@ -54,6 +68,8 @@ namespace Persistence.Contexts
                     builder.Entity(entityType.Name).Property<DateTime?>("InsertTime");
                     builder.Entity(entityType.Name).Property<DateTime?>("UpdateTime");
                     builder.Entity(entityType.Name).Property<DateTime?>("RemoveTime");
+                    builder.Entity(entityType.Name).Property<string?>("ModifiedBy");
+                    builder.Entity(entityType.Name).Property<string?>("CreatedBy");
                     builder.Entity(entityType.Name).Property<bool?>("IsRemoved");
                 }
             }
@@ -61,8 +77,10 @@ namespace Persistence.Contexts
             //base.OnModelCreating(builder);
             //base.OnModelCreating(builder);
         }
-        public override int SaveChanges()
+
+        private  void Savemethods()
         {
+
             var modifiedEntries = ChangeTracker.Entries()
                 .Where(p => p.State == EntityState.Modified ||
                 p.State == EntityState.Added ||
@@ -91,8 +109,19 @@ namespace Persistence.Contexts
                     item.Property("IsRemoved").CurrentValue = true;
                 }
             }
+        }
+        public  override int SaveChanges()
+        {
+             Savemethods();
             return base.SaveChanges();
         }
-     }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, 
+            CancellationToken cancellationToken = default)
+        {
+            Savemethods();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+    }
 }
 

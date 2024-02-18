@@ -7,7 +7,7 @@ using Persistence.IdentityServices;
 
 namespace IdentityManagmentSystem.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -23,35 +23,36 @@ namespace IdentityManagmentSystem.API.Controllers
         public async Task<ActionResult> ForgotPassword(ForgetPassDto resetRequest)
         {
 
-            await _authService.ForgotPasswordAsync(resetRequest);
-            return Ok();
-            //try
-            //{
-            //    await _authService.ForgotPasswordAsync(resetRequest);
-            //    return Ok();
-            //}
-            //catch (Exception ex)
-            //{
-            //    // Log the inner exception if it exists
-            //    if (ex.InnerException != null)
-            //    {
-            //        _logger.LogError(ex.InnerException, "Error in ForgotPassword");
-            //    }
+            //await _authService.ForgotPasswordAsync(resetRequest);
+            //return Ok();
+            try
+            {
+                await _authService.ForgotPasswordAsync(resetRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Log the inner exception if it exists
+                if (ex.InnerException != null)
+                {
+                    _logger.LogError(ex.InnerException, "Error in ForgotPassword");
+                }
 
-            //    return BadRequest(ex.Message);
-            //}
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<AuthResponse>> Login(AuthRequest request)
+        {
+            return Ok(await _authService.LoginAsync(request));
+        }
+
+        [HttpPost("register")]
+        public async Task<ActionResult<RegistrationResponse>> Register(RegistrationRequest request)
+        {
+            return Ok(await _authService.RegisterAsync(request));
         }
     }
 }
 
-//[HttpPost("login")]
-//public async Task<ActionResult<AuthResponse>> Login(AuthRequest request)
-//{
-//    return Ok(await _authService.LoginAsync(request));
-//}
-
-//[HttpPost("register")]
-//public async Task<ActionResult<RegistrationResponse>> Register(RegistrationRequest request)
-//{
-//    return Ok(await _authService.RegisterAsync(request));
-//}

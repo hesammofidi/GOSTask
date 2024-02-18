@@ -3,34 +3,6 @@
 @using IdentityManagement.UI.Services.Contract
 @inject IAuthService _authenticationService
 
-<h1>Rrgister</h1>
-<h1>@errorMessage</h1>
-@* <div class="row">
-    <div class="col-md-4">
-        <section>
-            <EditForm Model="Input" method="post" OnValidSubmit="RegisterUser" FormName="Register">
-                <DataAnnotationsValidator />
-                <hr />
-                <ValidationSummary class="text-danger" role="alert" />
-                <div class="form-floating mb-3">
-                    <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label for="email" class="form-label">Email</label>
-                    <ValidationMessage For="() => Input.Email" class="text-danger" />
-                </div>
-                <div class="form-floating mb-3">
-                    <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label for="password" class="form-label">Password</label>
-                    <ValidationMessage For="() => Input.Password" class="text-danger" />
-                </div>
-              
-                <div>
-                    <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-                </div>
-            </EditForm>
-        </section>
-    </div>
-
-</div> *@
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner py-4">
@@ -96,7 +68,7 @@
 
                     <p class="text-center">
                         <span>حساب کاربری دارید؟</span>
-                        <a href="/">
+                        <a href="/Login">
                             <span>وارد شوید</span>
                         </a>
                     </p>

@@ -1,53 +1,54 @@
-﻿using Aspose.Email.Clients.Exchange.Dav;
-using Aspose.Email.Clients.Exchange.WebService;
+﻿using Aspose.Email.Clients.Exchange.WebService;
+using Aspose.Email.Clients.Smtp;
 using Domain.Users;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MimeKit;
 
-using Aspose.Email.Clients.Exchange;
-using Aspose.Email.Mime;
-using System.Threading.Tasks;
-using Aspose.Email.Clients.Smtp;
-using System.Web;
+using MailKit.Net.Smtp;
+
 namespace Infrastructure.Mail
 {
-    public class SendEmail : IEmailSender<User>
+    public class SendEmail : IEmailSender<DomainUser>
     {
-        private SmtpClient _smtpClient;
-        private IEWSClient _exchangeClient;
+        private string exchangeServer = "smtp.office365.com";
+        private int exchangePort = 587;
+        private string username = "mofidi@rasha.co";
+        private string password = "H@53624";
 
-        public SendEmail()
+        public async Task SendConfirmationLinkAsync(DomainUser user, string email, string confirmationLink)
         {
-            //var currentUser = HttpUtility.UrlEncode("rs\\hesam");
-            _smtpClient = new SmtpClient("mail.rasha.co");
-            _smtpClient.Timeout = 20000;
-            _exchangeClient = EWSClient.GetEWSClient("https://mail.rasha.co/EWS/Exchange.asmx", "hesam", "H@53624","rasha.co");
+            await SendEmailAsync(user, email, "Confirmation Link", confirmationLink);
         }
 
-
-        public Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
+        public async Task SendPasswordResetCodeAsync(DomainUser user, string email, string resetCode)
         {
-            throw new NotImplementedException();
+            await SendEmailAsync(user, email, "Password Reset Code", resetCode);
         }
 
-        public Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
+        public async Task SendPasswordResetLinkAsync(DomainUser user, string email, string resetLink)
         {
-            var mailMessage = new Aspose.Email.MailMessage("Mofidi@rasha.co", email, "Password Reset Code",
-                $"Hello {user.Email},\n\nYour password reset code is: {resetCode}");
-
-            _smtpClient.Send(mailMessage);
-            _exchangeClient.Send(mailMessage);
-
-            return Task.CompletedTask;
+            await SendEmailAsync(user, email, "Password Reset Link", resetLink);
         }
 
-        public Task SendPasswordResetLinkAsync(User user, string email, string resetLink)
+        private async Task SendEmailAsync(DomainUser user, string email, string subject, string message)
         {
-            throw new NotImplementedException();
+            var mimeMessage = new MimeMessage();
+            mimeMessage.From.Add(new MailboxAddress("Erfa Moarefi", "noreply@rasha.co"));
+            mimeMessage.To.Add(new MailboxAddress(user.FullName, email));
+            mimeMessage.Subject = subject;
+            mimeMessage.Body = new TextPart("plain")
+            {
+                Text = message
+            };
+
+            using (var client = new MailKit.Net.Smtp.SmtpClient())
+            {
+                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                await client.ConnectAsync(exchangeServer, exchangePort, false);
+                await client.AuthenticateAsync(username, password);
+                await client.SendAsync(mimeMessage);
+                await client.DisconnectAsync(true);
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Infrastructure
         public static IServiceCollection ConfigureInfrastructureServices(this IServiceCollection services
           , IConfiguration configuration)
         {
-            services.AddTransient<IEmailSender<User>, SendEmail>();
+            services.AddTransient<IEmailSender<DomainUser>, SendEmail>();
 
             return services;
         }

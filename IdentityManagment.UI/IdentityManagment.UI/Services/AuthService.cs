@@ -1,9 +1,12 @@
 ﻿
 
 using IdentityManagement.UI.Services.Contract;
+using IdentityManagment.UI.Client.Models;
+using IdentityManagment.UI.Client;
 using IdentityManagment.UI.Models.IdentityModels;
 using Microsoft.AspNetCore.Identity.Data;
 using System.Text.Json;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace IdentityManagment.UI.Services
 {
@@ -11,14 +14,16 @@ namespace IdentityManagment.UI.Services
     {
         private readonly HttpClient _client;
         private readonly JsonSerializerOptions _options;
-
-        public AuthService(IHttpClientFactory factory)
+        private readonly AuthenticationStateProvider _authStateProvider;
+        public AuthService(IHttpClientFactory factory, 
+            AuthenticationStateProvider authStateProvider)
         {
             _client = factory.CreateClient("AuthenticationAPI");
             _options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
+            _authStateProvider = authStateProvider;
         }
 
         public async Task<LoginResponseDto> LoginUser(LoginRequestDto request)
@@ -32,7 +37,7 @@ namespace IdentityManagment.UI.Services
 
         public async Task RegisterAsync(RegisterRequestDto request)
         {
-            var response = await _client.PostAsJsonAsync("register", request);
+            var response = await _client.PostAsJsonAsync("Account/register", request);
             response.EnsureSuccessStatusCode();
         }
 
@@ -49,6 +54,24 @@ namespace IdentityManagment.UI.Services
             response.EnsureSuccessStatusCode();
         }
 
-      
+        public async Task LoginAsync(LoginRequestDto userloginVm)
+        {
+            var response = await _client.PostAsJsonAsync("Account/login", userloginVm);
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
+
+            if (string.IsNullOrEmpty(content!.AccessToken)) return;
+
+            var authenticationModel = new AuthenticationModel()
+            {
+                Token = content.AccessToken,
+                RefreshToken = content.RefreshToken,
+                UserName = content.Email
+            };
+
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)_authStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(authenticationModel);
+
+        }
     }
 }

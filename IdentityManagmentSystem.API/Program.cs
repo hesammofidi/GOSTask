@@ -24,6 +24,35 @@ builder.Services.ConfigureApplicationCookie(option =>
     option.AccessDeniedPath = "/Account/AccessDenied";
     option.SlidingExpiration = true;
 });
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddDefaultPolicy(policy =>
+
+//    {
+//        policy
+
+//            .AllowAnyOrigin()
+
+//            .AllowAnyMethod()
+
+//            .AllowAnyHeader();
+
+//        //.WithExposedHeaders("X-PagingData");
+//    });
+
+//});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+            builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+            });
+});
 AddSwagger(builder.Services);
 var app = builder.Build();
 
@@ -40,9 +69,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors("AllowAllOrigins");
 app.MapControllers();
-app.MapIdentityApi<User>();
+//app.MapIdentityApi<User>();
 app.Run();
 void AddSwagger(IServiceCollection services)
 {

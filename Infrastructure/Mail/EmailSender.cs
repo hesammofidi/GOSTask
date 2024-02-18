@@ -6,7 +6,7 @@ using System.Net.Mail;
 
 namespace Infrastructure.Mail
 {
-    public class EmailSender : IEmailSender<User>
+    public class EmailSender : IEmailSender<DomainUser>
     {
         private readonly SmtpClient _smtpClient;
         private readonly ILogger<EmailSender> _logger;
@@ -22,7 +22,7 @@ namespace Infrastructure.Mail
             };
             _logger = logger;
         }
-        public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
+        public async Task SendConfirmationLinkAsync(DomainUser user, string email, string confirmationLink)
         {
             var mailMessage = new MailMessage
             {
@@ -36,7 +36,7 @@ namespace Infrastructure.Mail
             await _smtpClient.SendMailAsync(mailMessage);
         }
 
-        public async Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
+        public async Task SendPasswordResetCodeAsync(DomainUser user, string email, string resetCode)
         {
             var mailMessage = new MailMessage
             {
@@ -52,7 +52,7 @@ namespace Infrastructure.Mail
             _logger.LogInformation("reset password code sent to {Email}", email);
         }
 
-        public async Task SendPasswordResetLinkAsync(User user, string email, string resetLink)
+        public async Task SendPasswordResetLinkAsync(DomainUser user, string email, string resetLink)
         {
             var mailMessage = new MailMessage
             {

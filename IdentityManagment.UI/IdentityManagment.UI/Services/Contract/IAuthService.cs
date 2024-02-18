@@ -10,5 +10,7 @@ namespace IdentityManagement.UI.Services.Contract
         Task RegisterAsync(RegisterRequestDto request);
         Task ForgotPasswordAsync(ForgotPasswordDto forgotPasswordDto);
         Task RessetPasswordAsync(RessetPasswordRequestDto resetPassword);
+
+        Task LoginAsync(LoginRequestDto userloginVm);
     }
 }
