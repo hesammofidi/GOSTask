@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Models.IdentityModels
+namespace Application.Models.IdentityModels.UserModels
 {
     public class JwtSettings
     {
@@ -12,6 +12,6 @@ namespace Application.Models.IdentityModels
         public string? Issuer { get; set; }
         public string? Audience { get; set; }
         public int DurationInMinutes { get; set; }
-        
+
     }
 }

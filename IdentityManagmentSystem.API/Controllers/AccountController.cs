@@ -1,5 +1,5 @@
 ﻿using Application.Contract.Identity;
-using Application.Models.IdentityModels;
+using Application.Models.IdentityModels.UserModels;
 using Infrastructure.Mail;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

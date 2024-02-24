@@ -5,15 +5,18 @@ using Microsoft.AspNetCore.Identity;
 using MimeKit;
 
 using MailKit.Net.Smtp;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace Infrastructure.Mail
 {
     public class SendEmail : IEmailSender<DomainUser>
     {
+
         private string exchangeServer = "smtp.office365.com";
         private int exchangePort = 587;
-        private string username = "mofidi@rasha.co";
-        private string password = "H@53624";
+        private string username = "notify@rasha.co";
+        private string password = "Cav81872";
 
         public async Task SendConfirmationLinkAsync(DomainUser user, string email, string confirmationLink)
         {
@@ -33,7 +36,7 @@ namespace Infrastructure.Mail
         private async Task SendEmailAsync(DomainUser user, string email, string subject, string message)
         {
             var mimeMessage = new MimeMessage();
-            mimeMessage.From.Add(new MailboxAddress("Erfa Moarefi", "noreply@rasha.co"));
+            mimeMessage.From.Add(new MailboxAddress("rasha.co", "info@rasha.co"));
             mimeMessage.To.Add(new MailboxAddress(user.FullName, email));
             mimeMessage.Subject = subject;
             mimeMessage.Body = new TextPart("plain")

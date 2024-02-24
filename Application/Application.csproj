@@ -17,8 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\UserFeatures\Commands\" />
-    <Folder Include="Entities\UserFeatures\Queries\" />
+    <Folder Include="Features\UserFeatures\Queries\" />
   </ItemGroup>
 
 </Project>
