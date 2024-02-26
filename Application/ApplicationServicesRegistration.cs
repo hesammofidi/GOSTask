@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +18,9 @@ namespace Application
             // services.AddAutoMapper(typeof(MappingProfile));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
+           
+              //  services.AddFluentValidationAutoValidation();
+              //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

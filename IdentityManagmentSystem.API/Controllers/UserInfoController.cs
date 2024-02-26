@@ -1,13 +1,17 @@
-﻿using Application.Models.IdentityModels.UserModels;
+﻿using Application.Dtos.CommonDtos;
+using Application.Models.IdentityModels.UserModels;
 using Application.Responses;
 using Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using static Application.Features.UserFeatures.Commands.AddUserRequestHandlerCommand;
 using static Application.Features.UserFeatures.Commands.ChangePasswordByAdminRequestHandlerCommand;
 using static Application.Features.UserFeatures.Commands.EditUserRequestHandlerCommand;
+using static Application.Features.UserFeatures.Queries.UsersFilterItemsRequestHandlerQuery;
+using static Application.Features.UserFeatures.Queries.UsersSearchItemsRequestHandlerQuery;
 
 namespace IdentityManagmentSystem.API.Controllers
 {
@@ -69,6 +73,32 @@ namespace IdentityManagmentSystem.API.Controllers
             var command = new ChangePasswordRequestCommand { changePasswordDto = changePassword };
             var response = await _mediator.Send(command);
             return Ok(response);
+        }
+        #endregion
+
+        #region GetFilterdUser
+        [HttpGet("FilterUser")]
+        public async Task<ActionResult<IEnumerable<UserInfoDto>>> FilterUsersAsync(
+            [FromQuery] FilterDataDto data)
+        {
+            var query = new UsersFilterItemsRequestQuery { FilterDataDto = data };
+            var response = await _mediator.Send(query);
+            Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
+
+            return Ok(response.Items);
+        }
+        #endregion
+
+        #region SearchUser
+        [HttpGet("SearchUser")]
+        public async Task<ActionResult<IEnumerable<UserInfoDto>>> SearchUsersAsync(
+            [FromQuery] SearchDataDto data)
+        {
+            var query = new UsersSearchItemsRequestQuery { SearchDataDto = data };
+            var response = await _mediator.Send(query);
+            Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
+
+            return Ok(response.Items);
         }
         #endregion
     }

@@ -1,9 +1,11 @@
 
+using Application;
 using Domain.Users;
 using Infrastructure;
 using Microsoft.OpenApi.Models;
 using Persistence;
 using Persistence.IdentityConfig;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,10 +14,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.ConfigurePersistenceServices(builder.Configuration);
+builder.Services.ConfigurePersistenceServices(builder.Configuration);
 builder.Services.ConfigureInfrastructureServices(builder.Configuration);
+builder.Services.ConfigureApplicationServices();
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddAuthorization();
+
 builder.Services.ConfigureApplicationCookie(option =>
 {
     option.ExpireTimeSpan = TimeSpan.FromMinutes(10);
@@ -43,15 +47,53 @@ builder.Services.ConfigureApplicationCookie(option =>
 
 //});
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAllOrigins",
+//            builder =>
+//            {
+//                builder.AllowAnyOrigin()
+//                       .AllowAnyHeader()
+//                       .AllowAnyMethod();
+//            });
+//});
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowSpecificOrigin",
+//        builder =>
+//        {
+//            builder.WithOrigins("http://rsdvs.rashadev.com:90")
+//                   .AllowAnyHeader()
+//                   .AllowAnyMethod();
+//        });
+//});
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddDefaultPolicy(policy =>
+//    {
+
+//        policy
+//            .AllowAnyOrigin()
+//            .AllowAnyMethod()
+//            .AllowAnyHeader()
+//            .WithExposedHeaders("X-PagingData");
+
+//    });
+//});
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins",
-            builder =>
-            {
-                builder.AllowAnyOrigin()
-                       .AllowAnyHeader()
-                       .AllowAnyMethod();
-            });
+    options.AddDefaultPolicy(policy =>
+
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+
 });
 AddSwagger(builder.Services);
 var app = builder.Build();
@@ -69,7 +111,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowAllOrigins");
+app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.MapControllers();
 //app.MapIdentityApi<User>();
 app.Run();

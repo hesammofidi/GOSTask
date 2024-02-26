@@ -11,14 +11,6 @@ using System.Threading.Tasks;
 
 namespace Application.Models.IdentityModels.UserModels.Validators
 {
-    //public class AddUserValidator : AbstractValidator<RegistrationRequest>
-    //{
-    //    public AddUserValidator()
-    //    {
-    //        Include(new IUserInfoValidator());
-    //    }
-    //}
-
     public class AddUserValidator : AbstractValidator<RegistrationRequest>
     {
         private readonly IAuthService _userService;

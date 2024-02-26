@@ -36,7 +36,7 @@ namespace Infrastructure.Mail
         private async Task SendEmailAsync(DomainUser user, string email, string subject, string message)
         {
             var mimeMessage = new MimeMessage();
-            mimeMessage.From.Add(new MailboxAddress("rasha.co", "info@rasha.co"));
+            mimeMessage.From.Add(new MailboxAddress("rasha.co", "notify@rasha.co"));
             mimeMessage.To.Add(new MailboxAddress(user.FullName, email));
             mimeMessage.Subject = subject;
             mimeMessage.Body = new TextPart("plain")

@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Persistence.Contexts;
 using Persistence.Helpers;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace Persistence.IdentityServices
         private readonly UserManager<DomainUser> _usermanager;
         private readonly SignInManager<DomainUser> _signInManager;
         private readonly ILogger<AuthService> _logger;
-        private DbContext _context;
+        private IdentityDatabaseContext _context;
         // private DbSet<TEntity> _set;
         protected DbSet<DomainUser> _set;
 
@@ -43,13 +44,16 @@ namespace Persistence.IdentityServices
             UserManager<DomainUser> usermanager,
             SignInManager<DomainUser> signInManager,
             IEmailSender<DomainUser> sendEmail,
-            ILogger<AuthService> logger)
+            ILogger<AuthService> logger,
+            IdentityDatabaseContext context)
         {
             _jwtSettings = jwtSettings.Value;
             _usermanager = usermanager;
             _signInManager = signInManager;
             _sendEmail = sendEmail;
             _logger = logger;
+            _context = context;
+            _set = _context.Set<DomainUser>();
         }
         #endregion
 
@@ -68,10 +72,32 @@ namespace Persistence.IdentityServices
             await _sendEmail.SendPasswordResetCodeAsync(user, resetRequest.Email, HtmlEncoder.Default.Encode(code));
         }
 
-        public Task RessetPasswordByUser(RessetPasswordDto changePassword)
+        public async Task RessetPasswordByUser(RessetPasswordDto changePassword)
         {
-            throw new NotImplementedException();
+            // Decode the code
+            var decodedCode = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(changePassword.Code));
+
+            // Find the user by the email
+            var user = await _usermanager.FindByEmailAsync(changePassword.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return;
+            }
+
+            // Reset the password
+            var result = await _usermanager.ResetPasswordAsync(user, decodedCode, changePassword.Password);
+
+            if (!result.Succeeded)
+            {
+                // Log the error or throw an exception
+                _logger.LogError("Error resetting password for {Email}", changePassword.Email);
+                throw new Exception("Error resetting password");
+            }
+
+            _logger.LogInformation("Password reset for {Email}", changePassword.Email);
         }
+
         #endregion
         #region Login
         public async Task<AuthResponse> LoginAsync(AuthRequest request)
@@ -150,8 +176,9 @@ namespace Persistence.IdentityServices
                 {
                     Email = request.Email,
                     FullName = request.FullName,
-
-                    UserName = request.Email,
+                    PhoneNumber = request.PhoneNumber,
+                    PhoneNumberConfirmed=true,
+                    UserName = request.UserName,
                     EmailConfirmed = true
                 };
 
@@ -159,7 +186,7 @@ namespace Persistence.IdentityServices
 
                 if (result.Succeeded)
                 {
-                    await _usermanager.AddToRoleAsync(user, "Basicuser");
+                    //await _usermanager.AddToRoleAsync(user, "Basicuser");
                     return new RegistrationResponse() 
                     {
                         UserId = user.Id,

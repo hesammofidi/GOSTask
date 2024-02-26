@@ -1,9 +1,13 @@
 ﻿using Application.Contract.Identity;
 using Application.Models.IdentityModels.UserModels;
+using Domain.Users;
 using Infrastructure.Mail;
+using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.IdentityServices;
+using static Application.Features.UserFeatures.Commands.AddUserRequestHandlerCommand;
 
 namespace IdentityManagmentSystem.API.Controllers
 {
@@ -13,36 +17,64 @@ namespace IdentityManagmentSystem.API.Controllers
     {
         private readonly IAuthService _authService;
         private readonly ILogger<AccountController> _logger;
-        public AccountController(IAuthService authService, ILogger<AccountController> logger)
+        private readonly IMediator _mediator;
+        private readonly UserManager<DomainUser> _usermanager;
+        public AccountController(IAuthService authService, ILogger<AccountController> logger, IMediator mediator, UserManager<DomainUser> usermanager)
         {
             _authService = authService;
             _logger = logger;
+            _mediator = mediator;
+            _usermanager = usermanager;
         }
 
         [HttpPost("forgotPass")]
         public async Task<ActionResult> ForgotPassword(ForgetPassDto resetRequest)
         {
-
-            //await _authService.ForgotPasswordAsync(resetRequest);
-            //return Ok();
-            try
+            if (resetRequest.Email == null)
             {
-                await _authService.ForgotPasswordAsync(resetRequest);
-                return Ok();
+                return BadRequest("Email is Null");
             }
-            catch (Exception ex)
+            var user = await _usermanager.FindByEmailAsync(resetRequest.Email);
+            if (user == null)
             {
-                // Log the inner exception if it exists
-                if (ex.InnerException != null)
-                {
-                    _logger.LogError(ex.InnerException, "Error in ForgotPassword");
-                }
-
-                return BadRequest(ex.Message);
+                return NotFound("User Not Found!");
             }
+            await _authService.ForgotPasswordAsync(resetRequest);
+            return Ok();
+            //try
+            //{
+            //    await _authService.ForgotPasswordAsync(resetRequest);
+            //    return Ok();
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Log the inner exception if it exists
+            //    if (ex.InnerException != null)
+            //    {
+            //        _logger.LogError(ex.InnerException, "Error in ForgotPassword");
+            //    }
+
+            //    return BadRequest(ex.Message);
+            //}
         }
 
-        [HttpPost("login")]
+        [HttpPost("ressetPass")]
+        public async Task<ActionResult<AuthResponse>> RessetPassword(RessetPasswordDto resetRequest)
+        {
+            if (resetRequest.Email == null)
+            {
+                return BadRequest("Email is Null");
+            }
+            var user = await _usermanager.FindByEmailAsync(resetRequest.Email);
+            if (user == null)
+            {
+                return NotFound("User Not Found!");
+            }
+            await _authService.RessetPasswordByUser(resetRequest);
+            return Ok();
+        }
+
+            [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login(AuthRequest request)
         {
             return Ok(await _authService.LoginAsync(request));
@@ -51,7 +83,9 @@ namespace IdentityManagmentSystem.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<RegistrationResponse>> Register(RegistrationRequest request)
         {
-            return Ok(await _authService.RegisterAsync(request));
+            var command = new AddUserRequestCommand { AddOrRegisterUserDto = request };
+            var response = await _mediator.Send(command);
+            return Ok(response);
         }
     }
 }
