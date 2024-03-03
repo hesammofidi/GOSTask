@@ -9,5 +9,7 @@ namespace Application.Contract.Persistance.SystemsRolesManagment
 {
     public interface IPermissionsRepository : IGenericSqlRepository<Permisions, int>
     {
+  
+        Task<bool> ExistTitle(string title);
     }
 }

@@ -52,7 +52,7 @@ namespace Application.Features.UserFeatures.Commands
                         var regResponse = await _userService.RegisterAsync(request.AddOrRegisterUserDto);
                         response.Success = true;
                         response.Message = "Creation Successful";
-                        response.Id = int.Parse(regResponse.UserId);
+                        //response.Id = int.Parse(regResponse.UserId);
                     }
                     catch (FormatException)
                     {

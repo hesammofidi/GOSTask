@@ -91,10 +91,14 @@ builder.Services.AddCors(options =>
         policy
             .AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .WithExposedHeaders("X-PagingData");
     });
 
 });
+
+//builder.Services.AddCors();
+
 AddSwagger(builder.Services);
 var app = builder.Build();
 
@@ -108,10 +112,24 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseHttpsRedirection();
 app.UseAuthorization();
-app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+app.UseCors(policy =>
+policy.AllowAnyHeader()
+.AllowAnyMethod()
+.AllowAnyOrigin()
+.WithExposedHeaders("X-PagingData")
+);
+
+//app.UseRouting();
+
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllers();
+//});
+
 app.MapControllers();
 //app.MapIdentityApi<User>();
 app.Run();

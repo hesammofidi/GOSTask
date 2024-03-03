@@ -39,14 +39,14 @@ namespace Application.Models.IdentityModels.UserModels.Validators
                 })
                 .WithMessage("User with this email already exists.");
 
-            RuleFor(x => x.PhoneNumber)
-                .MustAsync(async (phoneNumber, cancellation) =>
-                {
-                    var data = new FilterData { Filter = $"PhoneNumber eq {phoneNumber}" };
-                    var users = await _userService.FilterUserAsync(data);
-                    return !users.Items.Any();
-                })
-                .WithMessage("User with this phone number already exists.");
+            //RuleFor(x => x.PhoneNumber)
+            //    .MustAsync(async (phoneNumber, cancellation) =>
+            //    {
+            //        var data = new FilterData { Filter = $"PhoneNumber eq {phoneNumber}" };
+            //        var users = await _userService.FilterUserAsync(data);
+            //        return !users.Items.Any();
+            //    })
+            //    .WithMessage("User with this phone number already exists.");
 
 
             RuleFor(o => o.Password).NotEmpty()
