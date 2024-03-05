@@ -1,33 +1,31 @@
 ﻿using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Dtos.CommonDtos;
-using Application.Dtos.SystemsDto;
+using Application.Dtos.SystemRoleDtos;
 using Application.Responses;
 using IdentityManagmentSystem.API.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using static Application.Features.SystemFeatures.Commands.SystemRequestsHandlersCommand;
-using static Application.Features.SystemFeatures.Queries.GetSystemsRequestHandlerQuery;
+using static Application.Features.SystemRoleFeatures.Commands.SRCommandsRequestsHandlers;
+using static Application.Features.SystemRoleFeatures.Query.SRQueryRequestsHandlers;
 
 namespace IdentityManagmentSystem.API.Controllers
 {
-    public class SystemsController : ApiController
+    public class SystemRoleController : ApiController
     {
         private readonly IMediator _mediator;
-        private readonly ISystemsRepository _systemsRepository;
-        public SystemsController(IMediator mediator,
-            ISystemsRepository systemsRepository)
+        private readonly ISystemsRolesRepository _systemRoleRepository;
+        public SystemRoleController(IMediator mediator, ISystemsRolesRepository systemRoleRepository)
         {
             _mediator = mediator;
-            _systemsRepository = systemsRepository;
+            _systemRoleRepository = systemRoleRepository;
         }
-
         #region FilterSearch
         [HttpGet("filter")]
-        public async Task<ActionResult<IEnumerable<SystemInfoDto>>> FilterSystemsAsync(
+        public async Task<ActionResult<IEnumerable<SystemRoleDto>>> FilterSRAsync(
             [FromQuery] FilterDataDto data)
         {
-            var query = new GetSystemsFilterRequestQuery { FilterDataDto = data };
+            var query = new SRFilterQueryRequest { FilterDataDto = data };
             var response = await _mediator.Send(query);
             Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
 
@@ -35,10 +33,10 @@ namespace IdentityManagmentSystem.API.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<SystemInfoDto>>> SearchSystemsAsync(
+        public async Task<ActionResult<IEnumerable<SystemRoleDto>>> SearchSRAsync(
           [FromQuery] SearchDataDto data)
         {
-            var query = new GetSystemsSearchRequestQuery { searchDataDto = data };
+            var query = new SRSerchQueryRequest { SearchDataDto = data };
             var response = await _mediator.Send(query);
             Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
 
@@ -48,27 +46,27 @@ namespace IdentityManagmentSystem.API.Controllers
 
         #region getbyId
         [HttpGet("{id}")]
-        public async Task<ActionResult<SystemInfoDto>> GetSystemByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<SystemRoleDto>> GetSRByIdAsync([FromRoute] int id)
         {
-            var system = await _systemsRepository.Exist(id);
+            var systemRole = await _systemRoleRepository.Exist(id);
 
-            if (!system)
+            if (!systemRole)
             {
                 return NotFound($"Invalid PermissionId : {id}");
             }
 
-            var systemDto = await _mediator.Send(new GetSystemsRequestQuery { systemId = id });
+            var systemroleDto = await _mediator.Send(new GetSRRequestQuery { SRId = id });
 
-            return Ok(systemDto);
+            return Ok(systemroleDto);
         }
         #endregion
 
         #region Add
         [HttpPost("Add")]
-        public async Task<ActionResult<BaseCommandResponse>> AddSystem
-         ([FromBody] AddSystemDto data)
+        public async Task<ActionResult<BaseCommandResponse>> AddSystemRole
+         ([FromBody] AddSystemRoleDto data)
         {
-            var command = new AddSystemRequestCommand { systemDto = data };
+            var command = new AddSRRequestCommand { addSRDto = data };
             var response = await _mediator.Send(command);
             return Ok(response);
         }
@@ -77,18 +75,18 @@ namespace IdentityManagmentSystem.API.Controllers
         #region Edit
         [HttpPut("Edit")]
         public async Task<ActionResult<BaseCommandResponse>>
-          UpdateSystem([FromBody] EditSystemDto data)
+          UpdateSystemROle([FromBody] EditSystemRoelDto data)
         {
             if (data.Id == null)
             {
-                return BadRequest("systemId is Null");
+                return BadRequest("systemRoleId is Null");
             }
-            var user = await _systemsRepository.Exist(data.Id);
+            var user = await _systemRoleRepository.Exist(data.Id);
             if (!user)
             {
-                return NotFound("System Not Found!");
+                return NotFound("Systemrole Not Found!");
             }
-            var command = new EditSystemRequestCommand { systemDto = data };
+            var command = new EditSRRequestCommand { ediSRDto = data };
             var response = await _mediator.Send(command);
             return Ok(response);
         }
@@ -97,20 +95,20 @@ namespace IdentityManagmentSystem.API.Controllers
         #region Delete
         [HttpDelete("Delete")]
         public async Task<ActionResult>
-       DeleteSystem([FromBody] int deleteId)
+       DeleteSystemrole([FromBody] int deleteId)
         {
             if (deleteId == null)
             {
                 return BadRequest("systemId is Null");
             }
-            var user = await _systemsRepository.Exist(deleteId);
+            var user = await _systemRoleRepository.Exist(deleteId);
             if (user == null)
             {
                 return NotFound("system Not Found!");
             }
             try
             {
-                var command = new DeleteSystemRequestCommand { Id = deleteId };
+                var command = new DeleteSRRequestCommand { Id = deleteId };
                 await _mediator.Send(command);
                 return Ok();
             }

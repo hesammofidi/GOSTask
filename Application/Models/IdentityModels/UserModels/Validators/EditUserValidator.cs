@@ -9,6 +9,7 @@ namespace Application.Models.IdentityModels.UserModels.Validators
 {
     public class EditUserValidator : AbstractValidator<EditUserDto>
     {
+
         public EditUserValidator()
         {
             Include(new IUserInfoValidator());

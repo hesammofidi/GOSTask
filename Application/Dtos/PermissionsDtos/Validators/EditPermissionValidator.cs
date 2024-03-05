@@ -6,18 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Dtos.PermissionsDtos
+namespace Application.Dtos.PermissionsDtos.Validators
 {
-    public class PermissionsValidator : AbstractValidator<PermissionInfoDto>
+    public class EditPermissionValidator : AbstractValidator<EditPermissionDto>
     {
         private readonly IPermissionsRepository _permissionRepository;
-        public PermissionsValidator(IPermissionsRepository permissionRepository)
+
+        public EditPermissionValidator(IPermissionsRepository permissionRepository)
         {
             Include(new BaseValidator());
             _permissionRepository = permissionRepository;
-            RuleFor(o => o.Title)
-          .NotEmpty().WithMessage("Title is required")
-          .MustAsync(async (title, cancellation) => !await _permissionRepository.ExistTitle(title))
+            RuleFor(o => new { o.Title , o.Id })
+          
+          .MustAsync(async (x, cancellation) => !await _permissionRepository.ExistTitleInEdit(x.Title,x.Id))
           .WithMessage("Title must be unique");
         }
     }

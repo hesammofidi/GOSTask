@@ -9,6 +9,7 @@ namespace Application.Contract.Persistance.SystemsRolesManagment
 {
     public interface ISystemsRolesRepository : IGenericSqlRepository<SystemRoles, int>
     {
-
+        Task<bool> ExistSystemRole(int systemId, string RoleId);
+        Task<bool> ExistSystemRoleInEdit(int systemId, string RoleId,int Id);
     }
 }

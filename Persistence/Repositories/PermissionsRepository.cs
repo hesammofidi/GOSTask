@@ -25,7 +25,11 @@ namespace Persistence.Repositories
         public async Task<bool> ExistTitle(string title)
         {
             return await _context.Permission.AnyAsync(s => s.Title == title);
+        }
 
+        public async Task<bool> ExistTitleInEdit(string title, int Id)
+        {
+            return await _context.Systems.AnyAsync(s => s.Title == title && s.Id != Id);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace IdentityManagmentSystem.API.Controllers
         #region Addpermission
         [HttpPost("Add")]
         public async Task<ActionResult<BaseCommandResponse>> AddPermission
-         ([FromBody] PermissionInfoDto data)
+         ([FromBody] AddPermissionDto data)
         {
             var command = new AddPermissionRequestCommand { permissionDto = data };
             var response = await _mediator.Send(command);
@@ -79,7 +79,7 @@ namespace IdentityManagmentSystem.API.Controllers
         #region EditPermission
         [HttpPut("Edit")]
         public async Task<ActionResult<BaseCommandResponse>>
-          UpdatePermission([FromBody] PermissionInfoDto data)
+          UpdatePermission([FromBody] EditPermissionDto data)
         {
             if (data.Id == null)
             {

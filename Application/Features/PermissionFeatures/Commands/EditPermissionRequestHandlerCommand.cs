@@ -1,5 +1,6 @@
 ﻿using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Dtos.PermissionsDtos;
+using Application.Dtos.PermissionsDtos.Validators;
 using Application.Responses;
 using AutoMapper;
 using Domain;
@@ -16,7 +17,7 @@ namespace Application.Features.PermissionFeatures.Commands
     {
         public class EditPermissionRequestCommand : IRequest<BaseCommandResponse>
         {
-            public PermissionInfoDto? permissionDto { get; set; }
+            public EditPermissionDto? permissionDto { get; set; }
         }
         public class EditPermissionHandlerCommand : IRequestHandler<EditPermissionRequestCommand,BaseCommandResponse>
         {
@@ -33,7 +34,7 @@ namespace Application.Features.PermissionFeatures.Commands
             public async Task<BaseCommandResponse> Handle(EditPermissionRequestCommand request, CancellationToken cancellationToken)
             {
                 var response = new BaseCommandResponse();
-                var validator = new PermissionsValidator(_permissionRepository);
+                var validator = new EditPermissionValidator(_permissionRepository);
                 var validationResult = await validator.ValidateAsync(request.permissionDto);
                 if (validationResult.IsValid == false)
                 {

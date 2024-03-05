@@ -10,5 +10,6 @@ namespace Application.Contract.Persistance.SystemsRolesManagment
     public interface ISystemsRepository : IGenericSqlRepository<Systems, int>
     {
         Task<bool> ExistTitle(string title);
+        Task<bool> ExistTitleInEdit(string title,int Id);
     }
 }

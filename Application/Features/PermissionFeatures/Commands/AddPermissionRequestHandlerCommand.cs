@@ -1,6 +1,7 @@
 ﻿using Application.Contract.Identity;
 using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Dtos.PermissionsDtos;
+using Application.Dtos.PermissionsDtos.Validators;
 using Application.Dtos.RoleDtos.Validators;
 using Application.Responses;
 using AutoMapper;
@@ -19,7 +20,7 @@ namespace Application.Features.PermissionFeatures.Commands
     {
         public class AddPermissionRequestCommand() : IRequest<BaseCommandResponse>
         {
-            public PermissionInfoDto? permissionDto { get; set; }
+            public AddPermissionDto? permissionDto { get; set; }
         }
         public class AddPermissionHandlerCommand : IRequestHandler<AddPermissionRequestCommand, BaseCommandResponse>
         {
@@ -34,7 +35,7 @@ namespace Application.Features.PermissionFeatures.Commands
             public async Task<BaseCommandResponse> Handle(AddPermissionRequestCommand request, CancellationToken cancellationToken)
             {
                 var response = new BaseCommandResponse();
-                var validator = new PermissionsValidator(_permissionRepository);
+                var validator = new AddPermissionsValidator(_permissionRepository);
                 var validationResult = await validator.ValidateAsync(request.permissionDto);
                 if (validationResult.IsValid == false)
                 {

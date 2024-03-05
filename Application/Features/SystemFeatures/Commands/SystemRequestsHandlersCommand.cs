@@ -1,6 +1,7 @@
 ﻿using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Dtos.PermissionsDtos;
 using Application.Dtos.SystemsDto;
+using Application.Dtos.SystemsDto.Validators;
 using Application.Responses;
 using AutoMapper;
 using Domain;
@@ -18,7 +19,7 @@ namespace Application.Features.SystemFeatures.Commands
         #region AddSystem
         public class AddSystemRequestCommand :IRequest<BaseCommandResponse>
         {
-            public SystemInfoDto? systemDto { get; set; }
+            public AddSystemDto? systemDto { get; set; }
         }
         public class AddSystemHandlerCommand : IRequestHandler<AddSystemRequestCommand, BaseCommandResponse>
         {
@@ -32,7 +33,7 @@ namespace Application.Features.SystemFeatures.Commands
             public async Task<BaseCommandResponse> Handle(AddSystemRequestCommand request, CancellationToken cancellationToken)
             {
                 var response = new BaseCommandResponse();
-                var validator = new SystemValidator(_systemsRepository);
+                var validator = new AddSystemValidator(_systemsRepository);
                 var validationResult = await validator.ValidateAsync(request.systemDto);
                 if (validationResult.IsValid == false)
                 {
@@ -55,7 +56,7 @@ namespace Application.Features.SystemFeatures.Commands
         #region EditSystem
         public class EditSystemRequestCommand : IRequest<BaseCommandResponse>
         {
-            public SystemInfoDto? systemDto { get; set; }
+            public EditSystemDto? systemDto { get; set; }
         }
         public class EditSystemHandlerCommand : IRequestHandler<EditSystemRequestCommand, BaseCommandResponse>
         {
@@ -69,7 +70,7 @@ namespace Application.Features.SystemFeatures.Commands
             public async Task<BaseCommandResponse> Handle(EditSystemRequestCommand request, CancellationToken cancellationToken)
             {
                 var response = new BaseCommandResponse();
-                var validator = new SystemValidator(_systemsRepository);
+                var validator = new EditSystemValidator(_systemsRepository);
                 var validationResult = await validator.ValidateAsync(request.systemDto);
                 if (validationResult.IsValid == false)
                 {
@@ -100,7 +101,7 @@ namespace Application.Features.SystemFeatures.Commands
         public class DeleteSystemHandlerCommand : IRequestHandler<DeleteSystemRequestCommand>
         {
             private readonly ISystemsRepository _systemsRepository;
-            public DeleteSystemHandlerCommand(IMapper mapper, ISystemsRepository systemsRepository)
+            public DeleteSystemHandlerCommand( ISystemsRepository systemsRepository)
             {
                 _systemsRepository = systemsRepository;
             }
