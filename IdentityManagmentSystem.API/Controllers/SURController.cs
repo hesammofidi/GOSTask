@@ -1,32 +1,40 @@
 ﻿using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Dtos.CommonDtos;
 using Application.Dtos.SRPDtos;
+using Application.Dtos.SURDtos;
 using Application.Responses;
 using IdentityManagmentSystem.API.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Repositories;
 using System.Text.Json;
 using static Application.Features.SRPFeatures.Command.SRPRequestsHandlesCommand;
 using static Application.Features.SRPFeatures.Query.SRPRequestsHandlesQuery;
+using static Application.Features.SURFeatures.Commands.SURRequestsHandlersCommand;
+using static Application.Features.SURFeatures.Queries.SURRequestHandlerQuery;
+using static Application.Features.SystemPermissionFeatures.Command.SPRequestsHandlersCommad;
 
 namespace IdentityManagmentSystem.API.Controllers
 {
-    public class SRPController : ApiController
+ 
+
+    public class SURController : ApiController
     {
-        private readonly ISystemsRolesPermissionRepository _SRPRepository;
+        private readonly ISystemsRoleUsersRepository _SURRepository;
         private readonly IMediator _mediator;
-        public SRPController(ISystemsRolesPermissionRepository sRPRepository, IMediator mediator)
+        public SURController(
+            ISystemsRoleUsersRepository sURRepository, 
+            IMediator mediator)
         {
-            _SRPRepository = sRPRepository;
+            _SURRepository = sURRepository;
             _mediator = mediator;
         }
-
         #region FilterSearch
         [HttpGet("filter")]
-        public async Task<ActionResult<IEnumerable<SRPInfoDto>>> FilterSRPAsync(
+        public async Task<ActionResult<IEnumerable<SURInfoDto>>> FilterSURAsync(
             [FromQuery] FilterDataDto data)
         {
-            var query = new SRPFilterQueryRequest { FilterDataDto = data };
+            var query = new SURFilterQueryRequest { FilterDataDto = data };
             var response = await _mediator.Send(query);
             Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
 
@@ -34,10 +42,10 @@ namespace IdentityManagmentSystem.API.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<SRPInfoDto>>> SearchSRPAsync(
+        public async Task<ActionResult<IEnumerable<SURInfoDto>>> SearchSURAsync(
           [FromQuery] SearchDataDto data)
         {
-            var query = new SRpSerchQueryRequest { SearchDataDto = data };
+            var query = new SURSerchQueryRequest { SearchDataDto = data };
             var response = await _mediator.Send(query);
             Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
 
@@ -47,27 +55,27 @@ namespace IdentityManagmentSystem.API.Controllers
 
         #region getbyId
         [HttpGet("{id}")]
-        public async Task<ActionResult<SRPInfoDto>> GetSRPByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<SURInfoDto>> GetSURByIdAsync([FromRoute] int id)
         {
-            var SRP = await _SRPRepository.Exist(id);
+            var SUR = await _SURRepository.Exist(id);
 
-            if (!SRP)
+            if (!SUR)
             {
                 return NotFound($"Invalid SRPId : {id}");
             }
 
-            var sPDto = await _mediator.Send(new GetSRPRequestQuery { SRPId = id });
+            var surDto = await _mediator.Send(new GetSURRequestQuery { SURId = id });
 
-            return Ok(sPDto);
+            return Ok(surDto);
         }
         #endregion
 
         #region Add
         [HttpPost("Add")]
-        public async Task<ActionResult<BaseCommandResponse>> AddSRP
-         ([FromBody] AddSRPDto data)
+        public async Task<ActionResult<BaseCommandResponse>> AddSUR
+         ([FromBody] AddSURDto data)
         {
-            var command = new AddSRPRequestCommand { addSrpDto = data };
+            var command = new AddSURRequestCommand { addSurdto = data };
             var response = await _mediator.Send(command);
             return Ok(response);
         }
@@ -76,18 +84,18 @@ namespace IdentityManagmentSystem.API.Controllers
         #region Edit
         [HttpPut("Edit")]
         public async Task<ActionResult<BaseCommandResponse>>
-          UpdateSRP([FromBody] EditSRPDto data)
+          UpdateSUR([FromBody] EditSURDto data)
         {
             if (data.Id == null)
             {
                 return BadRequest("SRPId is Null");
             }
-            var user = await _SRPRepository.Exist(data.Id);
+            var user = await _SURRepository.Exist(data.Id);
             if (!user)
             {
                 return NotFound("SystemPermission Not Found!");
             }
-            var command = new EditSRPRequestCommand { editSrpDto = data };
+            var command = new EditSURRequestCommand { editSURDto = data };
             var response = await _mediator.Send(command);
             return Ok(response);
         }
@@ -100,16 +108,16 @@ namespace IdentityManagmentSystem.API.Controllers
         {
             if (deleteId == null)
             {
-                return BadRequest("systemId is Null");
+                return BadRequest("SURId is Null");
             }
-            var user = await _SRPRepository.Exist(deleteId);
+            var user = await _SURRepository.Exist(deleteId);
             if (user == null)
             {
-                return NotFound("SRP Not Found!");
+                return NotFound("SUR Not Found!");
             }
             try
             {
-                var command = new DeleteSRPRequestCommand { Id = deleteId };
+                var command = new DeleteSURRequestCommand { Id = deleteId };
                 await _mediator.Send(command);
                 return Ok();
             }
@@ -121,4 +129,6 @@ namespace IdentityManagmentSystem.API.Controllers
         }
         #endregion
     }
+
+
 }

@@ -21,7 +21,7 @@ namespace Application.Dtos.SRPDtos.Validators
            {
                return !await _SRPRepository.ExistSRPInEdit(x.systemId, x.PermissionId, x.RoleId,x.Id);
            })
-            .WithMessage("در حال حاضر نقش مورد نظر برای این سیستم موجود است");
+            .WithMessage("دیتای وارد شده تکراری است");
         }
     }
 }

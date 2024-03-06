@@ -22,7 +22,7 @@ namespace Application.Dtos.SRPDtos.Validators
             {
                 return !await _SRPRepository.ExistSRP(x.systemId, x.PermissionId, x.RoleId);
             })
-             .WithMessage("در حال حاضر نقش مورد نظر برای این سیستم موجود است");
+             .WithMessage("دیتای وارد شده تکراری است");
 
         }
     }

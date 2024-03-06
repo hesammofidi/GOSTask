@@ -5,24 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Dtos.SRPDtos.Validators
+namespace Application.Dtos.SURDtos.Validators
 {
-    public class BaseSRPValidator : AbstractValidator<IBaseSRPDto>
+    public class BaseSURValidator : AbstractValidator<IBaseSURDto>
     {
-        public BaseSRPValidator()
+        public BaseSURValidator()
         {
             RuleFor(o => o.systemId).NotEmpty()
-           .WithMessage("System is required");
+         .WithMessage("System is required");
             RuleFor(o => o.SystemName).NotEmpty()
            .WithMessage("SystemId is required");
             RuleFor(o => o.RoleId).NotEmpty()
            .WithMessage("Role is required");
             RuleFor(o => o.RoleName).NotEmpty()
            .WithMessage("RoleName is required");
-            RuleFor(o => o.PermissionId).NotEmpty()
+            RuleFor(o => o.usersId).NotEmpty()
             .WithMessage("Permission is required");
-            RuleFor(o => o.PermissionName).NotEmpty()
+            RuleFor(o => o.UserName).NotEmpty()
             .WithMessage("PermissionName is required");
+           
         }
     }
 }

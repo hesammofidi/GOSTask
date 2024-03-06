@@ -1,20 +1,16 @@
-﻿using Domain.Common;
-using Domain.Users;
+﻿using Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain
+namespace Application.Dtos.SURDtos
 {
-    public class SystemRoleUser : BaseDomainEntity<int>
+    public interface IBaseSURDto
     {
-        public Roles? Role { get; set; }
         public string? RoleId { get; set; }
-        public Systems? System { get; set; }
         public int systemId { get; set; }
-        public Users.DomainUser? users { get; set; }
         public string? usersId { get; set; }
         public string? SystemName { get; set; }
         public string? UserName { get; set; }
