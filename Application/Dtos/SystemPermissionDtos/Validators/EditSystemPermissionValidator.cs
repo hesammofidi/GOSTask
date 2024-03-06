@@ -16,6 +16,9 @@ namespace Application.Dtos.SystemPermissionDtos.Validators
             Include(new BaseSRUpValidator());
             _systemsPermissionRepository = systemsPermissionRepository;
 
+            RuleFor(o => o.PermissionId).NotEmpty()
+            .WithMessage("Permission is required");
+
             RuleFor(o => new { o.systemId, o.PermissionId, o.Id})
             .MustAsync(async (x, cancellation) =>
             {
