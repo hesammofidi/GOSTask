@@ -1,22 +1,17 @@
 ﻿using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Dtos.CommonDtos;
-using Application.Dtos.SRPDtos;
 using Application.Dtos.SURDtos;
 using Application.Responses;
 using IdentityManagmentSystem.API.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Persistence.Repositories;
 using System.Text.Json;
-using static Application.Features.SRPFeatures.Command.SRPRequestsHandlesCommand;
-using static Application.Features.SRPFeatures.Query.SRPRequestsHandlesQuery;
 using static Application.Features.SURFeatures.Commands.SURRequestsHandlersCommand;
 using static Application.Features.SURFeatures.Queries.SURRequestHandlerQuery;
-using static Application.Features.SystemPermissionFeatures.Command.SPRequestsHandlersCommad;
 
 namespace IdentityManagmentSystem.API.Controllers
 {
- 
+
 
     public class SURController : ApiController
     {

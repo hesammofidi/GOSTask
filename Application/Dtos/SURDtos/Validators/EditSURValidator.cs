@@ -14,7 +14,7 @@ namespace Application.Dtos.SURDtos.Validators
         private readonly ISystemsRoleUsersRepository _SURRepository;
         public EditSURValidator(ISystemsRoleUsersRepository sURRepository)
         {
-            Include(new BaseSURValidator());
+            Include(new SURPBaseValidator());
             _SURRepository = sURRepository;
             RuleFor(o => new { o.usersId, o.systemId, o.RoleId,o.Id})
                  .MustAsync(async (x, cancellation) =>

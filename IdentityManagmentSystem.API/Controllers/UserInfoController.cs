@@ -4,7 +4,6 @@ using Application.Responses;
 using Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using static Application.Features.UserFeatures.Commands.AddUserRequestHandlerCommand;

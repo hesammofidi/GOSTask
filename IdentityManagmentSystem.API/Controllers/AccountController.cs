@@ -41,21 +41,7 @@ namespace IdentityManagmentSystem.API.Controllers
             }
             await _authService.ForgotPasswordAsync(resetRequest);
             return Ok();
-            //try
-            //{
-            //    await _authService.ForgotPasswordAsync(resetRequest);
-            //    return Ok();
-            //}
-            //catch (Exception ex)
-            //{
-            //    // Log the inner exception if it exists
-            //    if (ex.InnerException != null)
-            //    {
-            //        _logger.LogError(ex.InnerException, "Error in ForgotPassword");
-            //    }
-
-            //    return BadRequest(ex.Message);
-            //}
+          
         }
 
         [HttpPost("ressetPass")]

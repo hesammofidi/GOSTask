@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Contexts
 {
-        public class IdentityDatabaseContext : IdentityDbContext<DomainUser>
+    public class IdentityDatabaseContext : IdentityDbContext<DomainUser>
         {
             public IdentityDatabaseContext(DbContextOptions<IdentityDatabaseContext> options)
                 : base(options)

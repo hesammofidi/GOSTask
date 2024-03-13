@@ -57,7 +57,7 @@ namespace Persistence.Repositories
                 .Filter(data.Filter)
                 .Sort(data.Sort)
                 .PageAsync(data.PageSize, data.PageIndex);
-            _logger.LogInformation("successfuly get Filter data  {text}", data.Filter);
+            
         }
 
         public async Task<TEntity?> GetByIdAsync(TId id)
@@ -84,7 +84,7 @@ namespace Persistence.Repositories
                 .Where(lambda)
                 .Sort(data.Sort)
                 .PageAsync(data.PageSize, data.PageIndex);
-            _logger.LogInformation("successfuly get search  {text}", data.SearchText);
+            
         }
 
         public async Task UpdateAsync(TEntity entity)

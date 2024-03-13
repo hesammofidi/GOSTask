@@ -1,6 +1,5 @@
 ﻿using Application.Dtos.CommonDtos;
 using Application.Dtos.RoleDtos;
-using Application.Models.IdentityModels.UserModels;
 using Application.Responses;
 using Domain;
 using MediatR;
@@ -12,11 +11,10 @@ using static Application.Features.RoleFeatures.Commands.DeleteRoleRequestHandler
 using static Application.Features.RoleFeatures.Commands.EditRolesRequestHandlerCommand;
 using static Application.Features.RoleFeatures.Queries.RolesFilterItemsRequestHandlerQuery;
 using static Application.Features.RoleFeatures.Queries.RolesSearchItemsRequestHandlerQuery;
-using static Application.Features.UserFeatures.Commands.EditUserRequestHandlerCommand;
 
 namespace IdentityManagmentSystem.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
     {

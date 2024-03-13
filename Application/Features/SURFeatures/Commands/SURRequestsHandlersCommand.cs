@@ -105,7 +105,7 @@ namespace Application.Features.SURFeatures.Commands
             private readonly ISystemsRoleUsersRepository _SURRepository;
             public DeleteSURHandlerCommand(ISystemsRoleUsersRepository sURRepository)
             {
-                ;
+                
                 _SURRepository = sURRepository;
             }
 

@@ -9,9 +9,6 @@ namespace Domain
         public int systemId { get; set; }
         public Permisions? Permission { get; set; }
         public int PermissionId { get; set; }
-        public string? SystemName { get; set; }
-        public string? PermissionName { get; set; }
-        public string? RoleName { get; set; }
     }
 
 }

@@ -12,8 +12,6 @@ namespace Application.Dtos.SURDtos
         public string? RoleId { get; set; }
         public int systemId { get; set; }
         public string? usersId { get; set; }
-        public string? SystemName { get; set; }
-        public string? UserName { get; set; }
-        public string? RoleName { get; set; }
+
     }
 }

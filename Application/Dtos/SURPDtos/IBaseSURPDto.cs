@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Application.Dtos.SURPDtos
 {
-    public class EditSURPDto : IBaseSURPDto
+    public interface IBaseSURPDto
     {
-        public int Id { get; set; }
+      
         public int systemId { get; set; }
-     
+      
         public string? usersId { get; set; }
-     
+       
         public int PermissionId { get; set; }
-    
+   
         public string? RoleId { get; set; }
     }
 }

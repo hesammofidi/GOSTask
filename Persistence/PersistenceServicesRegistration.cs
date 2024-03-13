@@ -21,6 +21,8 @@ namespace Persistence
             services.AddScoped<ISystemsRolesRepository, SystemRoleRepository>();
             services.AddScoped<ISystemsPermissionsRepository, SystemPermissionRepository>();
             services.AddScoped<ISystemsRolesPermissionRepository, SRPRepository>();
+            services.AddScoped<ISystemsRoleUsersRepository, SURRepository>();
+            services.AddScoped<ISystemsRolePermissionUsersRepository, SURPRepository>();
             return services;
         }
 
