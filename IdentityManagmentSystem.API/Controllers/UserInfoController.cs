@@ -40,11 +40,11 @@ namespace IdentityManagmentSystem.API.Controllers
         public async Task<ActionResult<BaseCommandResponse>>
             UpdateUser([FromBody] EditUserDto editUserInfoDto)
         {
-            if (editUserInfoDto.UserId == null)
+            if (editUserInfoDto.Id == null)
             {
                 return BadRequest("UserId is Null");
             }
-            var user = await _usermanager.FindByIdAsync(editUserInfoDto.UserId);
+            var user = await _usermanager.FindByIdAsync(editUserInfoDto.Id);
             if (user == null)
             {
                 return NotFound("User Not Found!");

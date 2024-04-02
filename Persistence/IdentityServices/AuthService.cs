@@ -232,7 +232,7 @@ namespace Persistence.IdentityServices
         {
             // Find the user in the database
             var user = await _usermanager.FindByIdAsync(domainUser.Id);
-            if (user == null)
+            if (user == null) 
             {
                 throw new Exception("User not found");
             }

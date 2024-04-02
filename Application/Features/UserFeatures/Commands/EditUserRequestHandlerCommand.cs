@@ -45,7 +45,7 @@ namespace Application.Features.UserFeatures.Commands
                     await _userService.EditUserAsync(userInfo);
                     response.Success = true;
                     response.Message = "Update Successful";
-                    response.Id = int.Parse( userInfo.Id );
+                    //response.Id = int.Parse( userInfo.Id );
                 }
                 return response;
             }

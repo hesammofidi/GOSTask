@@ -15,6 +15,8 @@ namespace Application.Profiles
         public PermissionsMapper()
         {
             CreateMap<Permisions, PermissionInfoDto>().ReverseMap();
+            CreateMap<Permisions, AddPermissionDto>().ReverseMap();
+            CreateMap<Permisions, EditPermissionDto>().ReverseMap();
         }
     }
 }

@@ -14,8 +14,10 @@ namespace Application.Profiles
     {
         public SystemsMapper()
         {
+            CreateMap<Systems, AddSystemDto>().ReverseMap();
+            CreateMap<Systems, EditSystemDto>().ReverseMap();
             CreateMap<Systems, SystemInfoDto>().ReverseMap();
-         
+
         }
     }
 }

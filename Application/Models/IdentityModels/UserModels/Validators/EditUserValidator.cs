@@ -14,7 +14,7 @@ namespace Application.Models.IdentityModels.UserModels.Validators
         {
             Include(new IUserInfoValidator());
 
-            RuleFor(o => o.UserId).NotEmpty()
+            RuleFor(o => o.Id).NotEmpty()
             .WithMessage("UserId is require");
             
         }

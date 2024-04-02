@@ -21,14 +21,117 @@ This is a web API project designed for the integrated management of users, their
     - `POST --> {IISUrl}/Account/forgotPass`:Sending a code to the email entered by the user, if a user has previously registered with the entered email.
     - `POST --> {IISUrl}/Account/ressetPass`:change password by the user with the code that sent to user in ForgotPass. 
 2. **UserInfo Controller**:
-    - `POST --> {IISUrl}/api/WFTasks/add`: Get New Items of WFTask List and Add To WfTasks Table in Database.
-    - `PUT --> {IISUrl}/api/WFTasks/{id}`: Set ShowNotif Flag to 0 If the item notification is displayed.
-    - `Get --> {IISUrl}/api/WFTasks/{id}`: Returns new user notifications that the user has not yet received.
-  return New items that have been added to the table from the WFTask list and their notification has not yet been sent to the user.
+    - `POST --> {IISUrl}/UserInfo/RegisterUser`: Register New User by Admin.
+    - `PUT --> {IISUrl}/UserInfo/EditUser`: Edit Information of User by admin except password.
+    - `PUT --> {IISUrl}/UserInfo/ChangePassword`: change password of User by admin.
+    - `Get --> {IISUrl}/UserInfo/FilterUser`: Receive filtered and paged user information 
+    - `Get --> {IISUrl}/UserInfo/SearchUser`: Receive Searched and paged user information
 3. **Roles Controller**:
-    - `POST --> {IISUrl}/AdminInformation/SpAuthentication`: Authenticate User With Sharepoint.
-    - `POST --> {IISUrl}/AdminInformation`: Add New User Admin (Sharepoint or System admin).
-    - `Get --> {IISUrl}/AdminInformation/{id}`: Returns Information Of User by Id of item of table.
-    - `Get --> {IISUrl}/AdminInformation/Type/{title}`: Returns Information Of Sharepoint Admin or System Admin .
-    - `Delete --> {IISUrl}/AdminInformation/{id}`: The user whose ID is entered will be deleted if it exists.
-    - `Put --> {IISUrl}/AdminInformation`: Update User Info whose ID is entered in body of request.
+    - `POST --> {IISUrl}/Roles/AddRoles`: Add New Role by Admin.
+    - `PUT --> {IISUrl}/Roles/EditRole`: Edit Information of Role by admin.
+    - `Delete --> {IISUrl}/Roles/DeleteRole`: Delete one role by admin.
+    - `Get --> {IISUrl}/Roles/FilterRoles`: Receive filtered and paged Role information 
+    - `Get --> {IISUrl}/Roles/SearchRoles`: Receive Searched and paged Role information
+ 4. **Systems Controller**:
+    - `POST --> {IISUrl}/Systems/Add`: Add New System by Admin.
+    - `PUT --> {IISUrl}/Systems/Edit`: Edit Information of System by admin.
+    - `Delete --> {IISUrl}/Systems/Delete`: Delete one System by admin.
+    - `Get --> {IISUrl}/Systems/filter`: Receive filtered and paged Systems information 
+    - `Get --> {IISUrl}/Systems/search`: Receive Searched and paged Systems information
+    - `Get --> {IISUrl}/Systems/{id}`: Receive System information by Id
+
+  5. **Permissions Controller**:
+    - `POST --> {IISUrl}/Permissions/Add`: Add New Permission by Admin.
+    - `PUT --> {IISUrl}/Permissions/Edit`: Edit Information of Permission by admin.
+    - `Delete --> {IISUrl}/Permissions/Delete`: Delete one Permission by admin.
+    - `Get --> {IISUrl}/Permissions/filter`: Receive filtered and paged Permissions information 
+    - `Get --> {IISUrl}/Permissions/search`: Receive Searched and paged Permissions information
+    - `Get --> {IISUrl}/Permissions/{id}`: Receive Permission information by Id
+
+## JSON Bodies for POST Requests
+1. **Account Login**:
+     
+    - The body for this request should be set to raw and JSON format.
+    - A token must be received in the login response.
+    - Body:
+    ```json
+    {
+      "Email": "",
+      "password": ""
+    }
+     ```
+2. **Account Register**:
+     
+    - The body for this request should be set to raw and JSON format.
+    - Body:
+    ```json
+    {
+      "Email": "",
+      "UserName": "",
+      "FullName": "",
+      "PhoneNumber": "",
+      "ConfirmPassword": "",
+      "password": ""
+    }
+     ```
+3. **Account forgotPass**:
+    - The body for this request should be set to raw and JSON format.
+    - Body:
+    ```json
+    {
+      "Email": ""
+    }
+     ```
+4. **Account ressetPass**:
+    - The body for this request should be set to raw and JSON format.
+    - Body:
+    ```json
+    {
+      "Email": "",
+      "password": "",
+      "ConfirmPassword": "",
+      "code": ""
+    }
+     ```
+5. **UserInfo RegisterUser**:
+    - The body for this request should be set to raw and JSON format.
+    - Body:
+    ```json
+    {
+     "Email": "",
+      "UserName": "",
+      "FullName": "",
+      "PhoneNumber": "",
+      "ConfirmPassword": "",
+      "password": ""
+    }
+     ```
+6. **Roles AddRoles**:
+    - The body for this request should be set to raw and JSON format.
+    - Body:
+    ```json
+    {
+     "Name": "",
+      "NormalizedName": ""
+    }
+     ```
+7. **Systems Add**:
+    - The body for this request should be set to raw and JSON format.
+    - Body:
+    ```json
+    {
+     "Title": "",
+      "Description": "",
+       "IsActive" : ""
+    }
+     ```
+8. **Permissions Add**:
+    - The body for this request should be set to raw and JSON format.
+    - Body:
+    ```json
+    {
+     "Title": "",
+      "Description": "",
+       "IsActive" : ""
+    }
+     ```

@@ -16,7 +16,7 @@ namespace Application.Models.IdentityModels.UserModels.Validators
                 .WithMessage("لطفا نام کاربری را وارد کنید");
 
             RuleFor(o => o.FullName).NotEmpty()
-               .WithMessage("لطفا نام کاربری را وارد کنید");
+               .WithMessage("لطفا نام کامل را وارد کنید");
 
             RuleFor(o => o.PhoneNumber).NotEmpty()
            .WithMessage("Please enter the phone number")
