@@ -94,5 +94,20 @@ namespace Persistence.Repositories
             await _context.SaveChangesAsync();
             _logger.LogInformation("Successfully updated entity");
         }
+
+        public async Task<TEntity?> GetByNameAsync(string Name)
+        {
+            _logger.LogInformation("Getting entity with ID {EntityId}", Name);
+            var entity = await _set.FindAsync(Name);
+            if (entity != null)
+            {
+                _logger.LogInformation("Successfully got entity with ID {EntityId}", Name);
+            }
+            else
+            {
+                _logger.LogWarning("Entity with ID {EntityId} not found", Name);
+            }
+            return entity;
+        }
     }
 }

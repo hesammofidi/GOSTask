@@ -37,7 +37,7 @@ namespace Persistence.Repositories
            srp.usersId == UserId
            && srp.RoleId == RoleId
            && srp.systemId == systemId
-           && srp.Id==Id);
+           && srp.Id!=Id);
         }
     }
 }

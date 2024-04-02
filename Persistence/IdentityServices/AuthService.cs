@@ -1,9 +1,11 @@
 ﻿using Application.Constants;
 using Application.Contract.Identity;
+using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Models.Abstraction;
 using Application.Models.IdentityModels.UserModels;
 using Application.Responses;
 using Azure.Core;
+using Domain;
 using Domain.Primitives.Contract;
 using Domain.Users;
 using MediatR;
@@ -37,6 +39,7 @@ namespace Persistence.IdentityServices
         private readonly SignInManager<DomainUser> _signInManager;
         private readonly ILogger<AuthService> _logger;
         private IdentityDatabaseContext _context;
+        private readonly ISystemsRepository _systemsRepository;
         // private DbSet<TEntity> _set;
         protected DbSet<DomainUser> _set;
 
@@ -45,7 +48,8 @@ namespace Persistence.IdentityServices
             SignInManager<DomainUser> signInManager,
             IEmailSender<DomainUser> sendEmail,
             ILogger<AuthService> logger,
-            IdentityDatabaseContext context)
+            IdentityDatabaseContext context,
+            ISystemsRepository systemsRepository)
         {
             _jwtSettings = jwtSettings.Value;
             _usermanager = usermanager;
@@ -54,6 +58,7 @@ namespace Persistence.IdentityServices
             _logger = logger;
             _context = context;
             _set = _context.Set<DomainUser>();
+            _systemsRepository = systemsRepository;
         }
         #endregion
 
@@ -103,6 +108,12 @@ namespace Persistence.IdentityServices
         public async Task<AuthResponse> LoginAsync(AuthRequest request)
         {
             var user = await _usermanager.FindByEmailAsync(request.Email);
+            var systemInfo = await _systemsRepository.GetByNameAsync(request.System);
+            if (systemInfo == null)
+            {
+                throw new Exception($"user with {request.System} not fount.");
+            }
+            var systemId = systemInfo.Id;
             if (user == null)
             {
                 throw new Exception($"user with {request.Email} not fount.");
@@ -114,7 +125,7 @@ namespace Persistence.IdentityServices
                 throw new Exception($"credentials for {request.Email} arent valid.");
             }
 
-            JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
+            JwtSecurityToken jwtSecurityToken = await GenerateToken(user, systemId);
 
             AuthResponse response = new AuthResponse()
             {
@@ -127,26 +138,27 @@ namespace Persistence.IdentityServices
             return response;
 
         }
-        private async Task<JwtSecurityToken> GenerateToken(DomainUser user)
+        private async Task<JwtSecurityToken> GenerateToken(DomainUser user, int systemId)
         {
             var userClaims = await _usermanager.GetClaimsAsync(user);
-            var roles = await _usermanager.GetRolesAsync(user);
+            //var roles = await _usermanager.GetRolesAsync(user);
 
-            var roleClaims = new List<Claim>();
-            for (int i = 0; i < roles.Count; i++)
-            {
-                roleClaims.Add(new Claim(ClaimTypes.Role, roles[i]));
-            }
+            //var roleClaims = new List<Claim>();
+            //for (int i = 0; i < roles.Count; i++)
+            //{
+            //    roleClaims.Add(new Claim(ClaimTypes.Role, roles[i]));
+            //}
 
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(CustomClaimTypes.Uid, user.Id)
-                    //new Claim(ClaimTypes.Role,"Admin")
+                new Claim(CustomClaimTypes.Uid, user.Id),
+                new Claim(CustomClaimTypes.System, systemId.ToString()) // Add the system claim here
+                //new Claim(ClaimTypes.Role,"Admin")
             }
-            .Union(userClaims)
-            .Union(roleClaims);
+            .Union(userClaims);
+            //.Union(roleClaims);
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
