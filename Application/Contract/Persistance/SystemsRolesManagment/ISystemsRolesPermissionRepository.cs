@@ -10,6 +10,7 @@ namespace Application.Contract.Persistance.SystemsRolesManagment
     public interface ISystemsRolesPermissionRepository : IGenericSqlRepository<SystemRolesPermission, int>
     {
         Task<bool> ExistSRP(int PermissionId, int systemId, string RoleId);
+        Task<List<int>> GetPermissions(int systemId, string RoleId);
         Task<bool> ExistSRPInEdit(int PermissionId, int systemId, string RoleId, int Id);
     }
 }

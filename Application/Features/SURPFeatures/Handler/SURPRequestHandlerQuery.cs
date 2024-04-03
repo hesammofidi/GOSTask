@@ -104,7 +104,9 @@ namespace Application.Features.SURPFeatures.Handler
         #region ExistPermission
         public class ExistPermissionRequest : IRequest<bool>
         {
-            public ExistPermissionDto existDto { get; set; }
+            public string? PermisName { get; set; }
+            public string? Uid { get; set; }
+            public int Sid { get; set; }
         }
         public class ExistPermissionHandler : IRequestHandler<ExistPermissionRequest, bool>
         {
@@ -121,18 +123,18 @@ namespace Application.Features.SURPFeatures.Handler
             {
                 var filterData = new FilterData
                 {
-                    Filter = $"title = \"{request.existDto.PermissionName}\"",
+                    Filter = $"title = \"{request.PermisName}\"",
                     PageSize = 1  // Only need to find one matching record
                 };
                 var permissionItem = await _permissionRepos.FilterAsync(filterData);
 
                 var permissionId =  permissionItem.Items.FirstOrDefault()!.Id;
-                if (permissionId != null)
+                if (permissionId != null && request.Uid!=null && request.Sid!=null)
                 {
                     var existperm = await _SURPRepository
                         .ExistPermission(permissionId,
-                        request.existDto.systemId,
-                        request.existDto.usersId);
+                        request.Sid,
+                        request.Uid);
                     return existperm;
                 }
                 return false;

@@ -9,11 +9,8 @@ namespace Application.Dtos.SURPDtos
     public class AddSURPDto : IBaseSURPDto
     {
         public int systemId { get; set; }
-
         public string? usersId { get; set; }
-
         public int PermissionId { get; set; }
-
         public string? RoleId { get; set; }
     }
 }

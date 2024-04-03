@@ -107,5 +107,31 @@ namespace Application.Features.SRPFeatures.Query
             }
         }
         #endregion
+
+        #region GetPermissions
+        public class GetPermissionsRequestCommand : IRequest<List<int>>
+        {
+            public int SystemId { get; set; }
+            public string RoleId { get; set; }
+        }
+
+        public class GetPermissionsHandlerCommand : IRequestHandler<GetPermissionsRequestCommand, List<int>>
+        {
+            private readonly ISystemsRolesPermissionRepository _SRPRepository;
+
+            public GetPermissionsHandlerCommand(ISystemsRolesPermissionRepository sRPRepository)
+            {
+                _SRPRepository = sRPRepository;
+            }
+
+            public async Task<List<int>> Handle(GetPermissionsRequestCommand request, CancellationToken cancellationToken)
+            {
+                var srpList = await _SRPRepository.GetPermissions(request.SystemId, request.RoleId);
+                return srpList;
+            }
+        }
+
+        #endregion
+
     }
 }

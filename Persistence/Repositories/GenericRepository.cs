@@ -49,7 +49,7 @@ namespace Persistence.Repositories
         }
 
 
-        public async Task<PagedList<TEntity>> FilterAsync(FilterData data)
+        public virtual async Task<PagedList<TEntity>> FilterAsync(FilterData data)
         {
             _logger.LogInformation("Filtering {text}", data.Filter);
             return await _set
@@ -75,7 +75,7 @@ namespace Persistence.Repositories
             return entity;
         }
 
-        public async Task<PagedList<TEntity>> SearchAsync(SearchData data)
+        public virtual async Task<PagedList<TEntity>> SearchAsync(SearchData data)
         {
             _logger.LogInformation("searching {text}", data.SearchText);
             var lambda = PersistenceHelpers.BuildLambdaPredicate<TEntity>(data);

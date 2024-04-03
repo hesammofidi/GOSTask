@@ -1,10 +1,13 @@
 ﻿using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Dtos.SURDtos;
 using Application.Dtos.SURDtos.Validators;
+using Application.Dtos.SURPDtos;
 using Application.Responses;
 using AutoMapper;
 using Domain;
 using MediatR;
+using static Application.Features.SRPFeatures.Query.SRPRequestsHandlesQuery;
+using static Application.Features.SURPFeatures.Command.SURPRequestsHandlersCommand;
 
 namespace Application.Features.SURFeatures.Commands
 {
@@ -19,15 +22,22 @@ namespace Application.Features.SURFeatures.Commands
         public class AddSURHandlerCommand : IRequestHandler<AddSURRequestCommand, BaseCommandResponse>
         {
             private readonly ISystemsRoleUsersRepository _SURRepository;
+            private readonly ISystemsRolesPermissionRepository _SRPRepository;
             private readonly IMapper _mapper;
+            private readonly IMediator _mediator;
 
             public AddSURHandlerCommand(
 
-                IMapper mapper, ISystemsRoleUsersRepository sURRepository)
+                IMapper mapper,
+                ISystemsRoleUsersRepository sURRepository,
+                ISystemsRolesPermissionRepository sRPRepository,
+                IMediator mediator)
             {
 
                 _mapper = mapper;
                 _SURRepository = sURRepository;
+                _SRPRepository = sRPRepository;
+                _mediator = mediator;
             }
             public async Task<BaseCommandResponse> Handle(AddSURRequestCommand request, CancellationToken cancellationToken)
             {
@@ -42,8 +52,29 @@ namespace Application.Features.SURFeatures.Commands
                 }
                 else
                 {
+                    
                     var surInfo = _mapper.Map<SystemRoleUser>(request.addSurdto);
+                    var getPermissionsCommand = new GetPermissionsRequestCommand
+                    { 
+                        SystemId = surInfo.systemId, 
+                        RoleId = surInfo.RoleId 
+                    };
+                    var srpList = await _mediator.Send(getPermissionsCommand);
                     await _SURRepository.AddAsync(surInfo);
+                    foreach (var permissionId in srpList)
+                    {
+                        var addSURPCommand = new AddSURPRequestCommand
+                        {
+                            addSurpdto = new AddSURPDto
+                            {
+                                systemId = surInfo.systemId,
+                                usersId = surInfo.usersId,
+                                PermissionId = permissionId,
+                                RoleId = surInfo.RoleId
+                            }
+                        };
+                        await _mediator.Send(addSURPCommand);
+                    }
                     response.Success = true;
                     response.Message = "Creation Successful";
                 }

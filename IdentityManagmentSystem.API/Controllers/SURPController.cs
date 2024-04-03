@@ -1,4 +1,5 @@
-﻿using Application.Contract.Persistance.SystemsRolesManagment;
+﻿using Application.Constants;
+using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Dtos.CommonDtos;
 using Application.Dtos.SURPDtos;
 using Application.Responses;
@@ -8,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using static Application.Features.SURPFeatures.Command.SURPRequestsHandlersCommand;
 using static Application.Features.SURPFeatures.Handler.SURPRequestHandlerQuery;
@@ -36,18 +38,29 @@ namespace IdentityManagmentSystem.API.Controllers
         [HttpPost("ExistPermission")]
         [Authorize]
         public async Task<ActionResult<bool>> ExistUserPermission(
-          [FromBody] ExistPermissionDto data)
+          [FromBody] string permissionName)
         {
-            var CheckSystem = await _systemrepos.Exist(data.systemId);
-            var CheckUser = await _usermanager.FindByIdAsync(data.usersId);
-            var checkPermis = await _permRepos.ExistTitle(data.PermissionName);
-            if(CheckUser == null || CheckSystem==false || checkPermis == false)
+            string token = Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            string systemId = jwtToken.Claims.First(claim => claim.Type == CustomClaimTypes.System).Value;
+            string userId = jwtToken.Claims.First(claim => claim.Type == CustomClaimTypes.Uid).Value;
+
+            //var CheckSystem = await _systemrepos.Exist(int.Parse(systemId));
+            //var CheckUser = await _usermanager.FindByIdAsync(userId);
+            //var checkPermis = await _permRepos.ExistTitle(data.PermissionName);
+            if(permissionName == null || systemId == null || userId == null)
             {
                 return NotFound(false);
             }
             else
             {
-                var query = new ExistPermissionRequest { existDto = data };
+                var query = new ExistPermissionRequest
+                { 
+                    PermisName = permissionName, 
+                    Uid=userId,
+                    Sid= int.Parse(systemId) 
+                };
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
