@@ -4,12 +4,6 @@ using Application.Models.Abstraction;
 using Application.Models.IdentityModels.UserModels;
 using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Application.Features.UserFeatures.Queries.UsersFilterItemsRequestHandlerQuery;
 
 namespace Application.Features.UserFeatures.Queries
 {

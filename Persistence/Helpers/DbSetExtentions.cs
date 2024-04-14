@@ -8,7 +8,6 @@ namespace Persistence.Helpers
     {
         private const int Default_Page_Size = 10;
         private const int Max_Page_Size = 100;
-
         public static IQueryable<TEntity> Filter<TEntity>(
             this IQueryable<TEntity> query,
             string? filter)
@@ -19,7 +18,6 @@ namespace Persistence.Helpers
             }
             return query.Where(filter);
         }
-
         public static IQueryable<TEntity> Sort<TEntity>(this IQueryable<TEntity> query, string? sort)
         {
             if (string.IsNullOrEmpty(sort))
@@ -28,7 +26,6 @@ namespace Persistence.Helpers
             }
             return query.OrderBy(sort);
         }
-
         public static async Task<PagedList<TEntity>> PageAsync<TEntity>(
             this IQueryable<TEntity> query,
             int? pageSize,
@@ -65,10 +62,14 @@ namespace Persistence.Helpers
             {
                 pageIndex = 1;
             }
-
             var items = await query.Skip((pageIndex!.Value - 1) * pageSize!.Value).Take(pageSize!.Value).ToListAsync();
-
             var totalRecordCount = await query.CountAsync();
+            // Add logging
+            if (items.Count == 0)
+            {
+                Console.WriteLine("items is empty");
+            }
+
             return new PagedList<TEntity>(items, pageSize.Value, pageIndex.Value, totalRecordCount);
         }
     }

@@ -45,7 +45,7 @@ namespace IdentityManagmentSystem.API.Controllers
         }
 
         [HttpPost("ressetPass")]
-        public async Task<ActionResult<AuthResponse>> RessetPassword(RessetPasswordDto resetRequest)
+        public async Task<ActionResult> RessetPassword(RessetPasswordDto resetRequest)
         {
             if (resetRequest.Email == null)
             {

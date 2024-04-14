@@ -268,7 +268,7 @@ namespace Persistence.IdentityServices
         public async Task ChangePasswordByAdmin(ChangePasswordDto changePassword)
         {
             // Find the user in the database
-            var user = await _usermanager.FindByIdAsync(changePassword.UserId);
+            var user = await _usermanager.FindByIdAsync(changePassword.Id);
             if (user == null)
             {
                 throw new Exception("User not found");
@@ -289,6 +289,18 @@ namespace Persistence.IdentityServices
             {
                 throw new Exception("Password update failed");
             }
+        }
+
+        public async Task<bool> UserExist(string Id)
+        {
+            var user = await _usermanager.FindByIdAsync(Id);
+            if (user == null)
+                return false;
+            else
+            {
+                return true;
+            }
+               
         }
 
         #endregion

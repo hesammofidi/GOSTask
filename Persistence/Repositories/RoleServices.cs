@@ -28,8 +28,12 @@ namespace Persistence.Repositories
 
         public async Task AddRoleAsync(AddRoleDto addRoleDto)
         {
-            var role = new Roles { Name = addRoleDto.Name,
-            NormalizedName=addRoleDto.NormalizedName};
+            var role = 
+                new Roles 
+                { 
+                    Name = addRoleDto.Name,
+                    NormalizedName=addRoleDto.NormalizedName
+                };
             var result = await _roleManager.CreateAsync(role);
             if (!result.Succeeded)
             {

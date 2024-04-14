@@ -1,4 +1,5 @@
-﻿using Application.Dtos.CommonDtos;
+﻿using Application.Contract.Identity;
+using Application.Dtos.CommonDtos;
 using Application.Models.IdentityModels.UserModels;
 using Application.Responses;
 using Domain.Users;
@@ -19,8 +20,8 @@ namespace IdentityManagmentSystem.API.Controllers
     public class UserInfoController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly UserManager<DomainUser> _usermanager;
-        public UserInfoController(IMediator mediator, UserManager<DomainUser> usermanager)
+        private readonly IAuthService _usermanager;
+        public UserInfoController(IMediator mediator, IAuthService usermanager)
         {
             _mediator = mediator;
             _usermanager = usermanager;
@@ -32,7 +33,12 @@ namespace IdentityManagmentSystem.API.Controllers
         {
             var command = new AddUserRequestCommand { AddOrRegisterUserDto = addUserDto };
             var response = await _mediator.Send(command);
-            return Ok(response);
+            if(response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+
         }
 
         #region EditUser
@@ -44,14 +50,18 @@ namespace IdentityManagmentSystem.API.Controllers
             {
                 return BadRequest("UserId is Null");
             }
-            var user = await _usermanager.FindByIdAsync(editUserInfoDto.Id);
+            var user = await _usermanager.UserExist(editUserInfoDto.Id);
             if (user == null)
             {
                 return NotFound("User Not Found!");
             }
             var command = new EditUserRequestCommand { editUserDto = editUserInfoDto };
             var response = await _mediator.Send(command);
-            return Ok(response);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
         #endregion
 
@@ -60,18 +70,22 @@ namespace IdentityManagmentSystem.API.Controllers
         public async Task<ActionResult<BaseCommandResponse>>
             ChangePasswordByAdmin([FromBody] ChangePasswordDto changePassword)
         {
-            if (changePassword.UserId == null)
+            if (changePassword.Id == null)
             {
                 return BadRequest("UserId is Null");
             }
-            var user = await _usermanager.FindByIdAsync(changePassword.UserId);
+            var user = await _usermanager.UserExist(changePassword.Id);
             if (user == null)
             {
                 return NotFound("User Not Found!");
             }
             var command = new ChangePasswordRequestCommand { changePasswordDto = changePassword };
             var response = await _mediator.Send(command);
-            return Ok(response);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
         #endregion
 
@@ -82,6 +96,16 @@ namespace IdentityManagmentSystem.API.Controllers
         {
             var query = new UsersFilterItemsRequestQuery { FilterDataDto = data };
             var response = await _mediator.Send(query);
+            if (response == null)
+            {
+                Console.WriteLine("_mediator.Send(query) returned null");
+                return NotFound();
+            }
+            if (response.Paging == null)
+            {
+                Console.WriteLine("response.Paging is null");
+                return NotFound();
+            }
             Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
 
             return Ok(response.Items);

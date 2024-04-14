@@ -16,6 +16,7 @@ namespace Application.Contract.Identity
     public interface IAuthService 
     {
         Task<AuthResponse> LoginAsync(AuthRequest request);
+        Task<bool> UserExist(string Id);
         Task<RegistrationResponse> RegisterAsync(RegistrationRequest request);
         Task EditUserAsync(DomainUser domainUser);
         Task ForgotPasswordAsync(ForgetPassDto request);

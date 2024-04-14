@@ -97,22 +97,22 @@ namespace IdentityManagmentSystem.API.Controllers
         #endregion
 
         #region Deletepermission
-        [HttpDelete("Delete")]
+        [HttpDelete("Delete/{id}")]
         public async Task<ActionResult>
-       Deletepermission([FromBody] int deleteId)
+       Deletepermission( int id)
         {
-            if (deleteId == null)
+            if ( id == null)
             {
                 return BadRequest("permissionId is Null");
             }
-            var user = await _permissionRepository.Exist(deleteId);
+            var user = await _permissionRepository.Exist( id);
             if (user == null)
             {
                 return NotFound("permission Not Found!");
             }
             try
             {
-                var command = new DeletePermissionRequestCommand { permissionId = deleteId };
+                var command = new DeletePermissionRequestCommand { permissionId = id };
                 await _mediator.Send(command);
                 return Ok();
             }

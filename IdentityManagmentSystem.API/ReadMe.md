@@ -135,3 +135,132 @@ This is a web API project designed for the integrated management of users, their
        "IsActive" : ""
     }
      ```
+ ## JSON Bodies for PUT Requests
+ 1. **UserInfo EditUser**:
+      - The body for this request should be set to raw and JSON format.
+     - Body:
+ ```json
+    {
+      "Id": "",
+      "Email": "",
+      "UserName": "",
+      "FullName": "",
+      "PhoneNumber": "",
+    }
+     
+```
+ 2. **UserInfo ChangePassword**:
+      - The body for this request should be set to raw and JSON format.
+     - Body:
+ ```json
+    {
+      "Id": "",
+      "ConfirmPassword": "",
+      "password": ""
+    }
+```
+3. **Systems Edit**:
+     - The body for this request should be set to raw and JSON format.
+     - Body:
+ ```json
+    {
+      "Id": "",
+      "Title": "",
+      "Description": "",
+      "IsActive" : ""
+    }
+```
+4. **Permissions Edit**:
+     - The body for this request should be set to raw and JSON format.
+     - Body:
+ ```json
+    {
+      "Id": "",
+      "Title": "",
+      "Description": "",
+      "IsActive" : ""
+    }
+```
+5. **Roles EditRole**:
+     - The body for this request should be set to raw and JSON format.
+     - Body:
+ ```json
+    {
+      "Id": "",
+      "Name": "",
+      "NormalizedName": "",
+    }
+```
+##  Responses
+1. **Account Login**:
+   `POST --> {IISUrl}/Account/login`
+  - If the user Authenticate successfully The response will be:
+    - Status: 200
+    - Body:
+  ```json
+    {
+    "Id": "",
+    "Email": "",
+    "AccessToken": ""
+    }
+  ```
+  2. **Account Register**:
+   `POST --> {IISUrl}/Account/register`
+  - If the user Registration successfully The response will be:
+    - Status: 200
+    - Body:
+  ```json
+    {
+    "UserId": "",
+    "UserEmail": ""
+    }
+  ```
+  3. **Account forgotPass**:
+   `POST --> {IISUrl}/Account/forgotPass`
+  - If forgotPass successfully resive an email and The response will be:
+    - Status: 200
+   
+  4. **Account ressetPass**:
+   `POST --> {IISUrl}/Account/ressetPass`
+    - If ressetPass successfully password will be change The response will be:
+    - Status: 200
+   
+  5. **UserInfo RegisterUser**:
+    - `POST --> {IISUrl}/UserInfo/RegisterUser`
+    - If registration User successfully The response will be:
+    - Status: 200
+       - Body:
+  ```json
+    {
+    "Success": "true",
+    "Message": "Creation Successful"
+    }
+  
+ ```
+   - If registration User fail The response will be:
+    - Status: 400
+       - Body:
+  ```json
+    {
+    "Success": "false",
+    "Message": "Creation fail",
+    "errors": "validation errors"
+    }
+  
+ ```
+
+   6. **UserInfo EditUser**:
+      - `PUT --> {IISUrl}/UserInfo/EditUser`
+    - If Edit User successfully The response will be:
+    - Status: 200
+       - Body:
+  ```json
+    {
+    "Success": "true",
+    "Message": "Creation Successful"
+    }
+  
+ ```
+
+
+  

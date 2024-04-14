@@ -13,7 +13,7 @@ namespace Application.Models.IdentityModels.UserModels.Validators
         {
             RuleFor(o => o.Password).NotEmpty()
               .WithMessage("لطفا رمز عبور را وارد کنید");
-            RuleFor(o => o.UserId).NotEmpty()
+            RuleFor(o => o.Id).NotEmpty()
              .WithMessage("UserId is require");
             RuleFor(o => o.ConfirmPassword).NotEmpty()
                .WithMessage("confirm password is require");

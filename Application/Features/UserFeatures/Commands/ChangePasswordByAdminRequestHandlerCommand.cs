@@ -42,7 +42,7 @@ namespace Application.Features.UserFeatures.Commands
                         await _userService.ChangePasswordByAdmin(request.changePasswordDto);
                         response.Success = true;
                         response.Message = "Chnage Password Successful";
-                        response.Id = int.Parse(request.changePasswordDto.UserId);
+                        response.Id = int.Parse(request.changePasswordDto.Id);
                     }
                     catch (FormatException)
                     {
