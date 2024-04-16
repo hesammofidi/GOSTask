@@ -17,7 +17,14 @@ namespace Application.Profiles
         {
             CreateMap<SystemRoleUser, AddSURDto>().ReverseMap();
             CreateMap<SystemRoleUser, EditSURDto>().ReverseMap();
-            CreateMap<SystemRoleUser, SURInfoDto>().ReverseMap();
+            CreateMap<SystemRoleUser, SURInfoDto>()
+                .ForMember(SUR => SUR.RoleName, opt =>
+               opt.MapFrom(src => src.Role.Name))
+                .ForMember(SUR => SUR.SystemName, opt =>
+                opt.MapFrom(src => src.System.Title))
+                .ForMember(SUR => SUR.UserName, opt =>
+                opt.MapFrom(src => src.users.FullName))
+                .ReverseMap();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Persistence.IdentityConfig.BaseConfigs
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             builder.HasKey(e => e.Id);
-            builder.Property(e => e.Title).IsRequired();
+            //builder.Property(e => e.Title).IsRequired();
             builder.HasIndex(p=>p.Title).IsUnique();
         }
     }

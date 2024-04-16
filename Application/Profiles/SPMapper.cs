@@ -15,8 +15,13 @@ namespace Application.Profiles
         public SPMapper()
         {
             CreateMap<SystemPermission, AddSPDto>().ReverseMap();
-            CreateMap<SystemRoles, EditSPDto>().ReverseMap();
-            CreateMap<SystemRoles, SystemPermissionDto>().ReverseMap();
+            CreateMap<SystemPermission, EditSPDto>().ReverseMap();
+            CreateMap<SystemPermission, SystemPermissionDto>()
+                .ForMember(SP => SP.PermissionName, opt => 
+                opt.MapFrom(src => src.Permission.Title))
+                 .ForMember(SP => SP.SystemName, opt =>
+                opt.MapFrom(src => src.System.Title))
+                .ReverseMap();
         }
     }
 }

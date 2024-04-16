@@ -48,6 +48,14 @@ This is a web API project designed for the integrated management of users, their
     - `Get --> {IISUrl}/Permissions/search`: Receive Searched and paged Permissions information
     - `Get --> {IISUrl}/Permissions/{id}`: Receive Permission information by Id
 
+6. **SystemPermissions Controller**:
+    - `POST --> {IISUrl}/Permissions/Add`: Add New Permission by Admin.
+    - `PUT --> {IISUrl}/Permissions/Edit`: Edit Information of Permission by admin.
+    - `Delete --> {IISUrl}/Permissions/Delete`: Delete one Permission by admin.
+    - `Get --> {IISUrl}/Permissions/filter`: Receive filtered and paged Permissions information 
+    - `Get --> {IISUrl}/Permissions/search`: Receive Searched and paged Permissions information
+    - `Get --> {IISUrl}/Permissions/{id}`: Receive Permission information by Id
+
 ## JSON Bodies for POST Requests
 1. **Account Login**:
      

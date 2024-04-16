@@ -10,7 +10,14 @@ namespace Application.Profiles
         {
             CreateMap<SystemRolesPermission, AddSRPDto>().ReverseMap();
             CreateMap<SystemRolesPermission, EditSRPDto>().ReverseMap();
-            CreateMap<SystemRolesPermission, SRPInfoDto>().ReverseMap();
+            CreateMap<SystemRolesPermission, SRPInfoDto>()
+                  .ForMember(SRP => SRP.RoleName, opt =>
+                opt.MapFrom(src => src.Role.Name))
+                .ForMember(SRP => SRP.SystemName, opt =>
+                opt.MapFrom(src => src.System.Title))
+                 .ForMember(SRP => SRP.PermissionName, opt =>
+                opt.MapFrom(src => src.Permission.Title))
+                .ReverseMap();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Domain
 {
     public class Systems : BaseDomainEntity<int>
     {
-        public string? Title { get; set; }
+      
         public bool IsActive { get; set; }
         public string? Description { get; set; }
         public ICollection<SystemRoles>? SystemRole { get; set; }

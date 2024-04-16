@@ -13,5 +13,9 @@ namespace Application.Dtos.SURPDtos
         public string? usersId { get; set; }
         public int PermissionId { get; set; }
         public string? RoleId { get; set; }
+        public string? UserName { get; set; }
+        public string? RoleName { get; set; }
+        public string? PermissionName { get; set; }
+        public string? SystemName { get; set; }
     }
 }
