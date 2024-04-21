@@ -9,7 +9,7 @@ namespace Application.Dtos.SystemRoleDtos
 {
     public class SystemRoleDto : IBaseSurpDto
     {
-        public int? systemId { get; set; }
+        public int systemId { get; set; }
         public int? Id { get; set; }
         public string? RoleId { get; set; }
         public string? RoleName { get; set; }

@@ -64,7 +64,6 @@ namespace IdentityManagmentSystem.API.Controllers
             return BadRequest(response);
         }
         #endregion
-
         #region ChangePAssword
         [HttpPut("ChangePassword")]
         public async Task<ActionResult<BaseCommandResponse>>
@@ -88,7 +87,18 @@ namespace IdentityManagmentSystem.API.Controllers
             return BadRequest(response);
         }
         #endregion
+        #region SearchUser
+        [HttpGet("SearchUser")]
+        public async Task<ActionResult<IEnumerable<UserInfoDto>>> SearchUsersAsync(
+            [FromQuery] SearchDataDto data)
+        {
+            var query = new UsersSearchItemsRequestQuery { SearchDataDto = data };
+            var response = await _mediator.Send(query);
+            Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
 
+            return Ok(response.Items);
+        }
+        #endregion
         #region GetFilterdUser
         [HttpGet("FilterUser")]
         public async Task<ActionResult<IEnumerable<UserInfoDto>>> FilterUsersAsync(
@@ -106,19 +116,6 @@ namespace IdentityManagmentSystem.API.Controllers
                 Console.WriteLine("response.Paging is null");
                 return NotFound();
             }
-            Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
-
-            return Ok(response.Items);
-        }
-        #endregion
-
-        #region SearchUser
-        [HttpGet("SearchUser")]
-        public async Task<ActionResult<IEnumerable<UserInfoDto>>> SearchUsersAsync(
-            [FromQuery] SearchDataDto data)
-        {
-            var query = new UsersSearchItemsRequestQuery { SearchDataDto = data };
-            var response = await _mediator.Send(query);
             Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
 
             return Ok(response.Items);

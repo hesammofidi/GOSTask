@@ -93,9 +93,9 @@ namespace IdentityManagmentSystem.API.Controllers
         #endregion
 
         #region Delete
-        [HttpDelete("Delete")]
+        [HttpDelete("Delete/{deleteId}")]
         public async Task<ActionResult>
-       DeleteSystemrole([FromBody] int deleteId)
+       DeleteSystemrole(int deleteId)
         {
             if (deleteId == null)
             {

@@ -97,9 +97,9 @@ namespace IdentityManagmentSystem.API.Controllers
         #endregion
 
         #region Delete
-        [HttpDelete("Delete")]
+        [HttpDelete("Delete/{deleteId}")]
         public async Task<ActionResult>
-       DeleteSRP([FromBody] int deleteId)
+       DeleteSRP(int deleteId)
         {
             if (deleteId == null)
             {

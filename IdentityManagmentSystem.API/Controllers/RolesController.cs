@@ -33,10 +33,14 @@ namespace IdentityManagmentSystem.API.Controllers
         {
             var command = new AddRolesRequestCommand { addRoleDto = data };
             var response = await _mediator.Send(command);
-            return Ok(response);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
-        #region EditUser
+        #region Edit
         [HttpPut("EditRole")]
         public async Task<ActionResult<BaseCommandResponse>>
             UpdateRole([FromBody] EditRoleDto editroledata)
@@ -48,11 +52,15 @@ namespace IdentityManagmentSystem.API.Controllers
             var user = await _roleManager.FindByIdAsync(editroledata.Id);
             if (user == null)
             {
-                return NotFound("User Not Found!");
+                return NotFound("Role Not Found!");
             }
             var command = new EditRolesRequestCommand { EditRoleDto = editroledata };
             var response = await _mediator.Send(command);
-            return Ok(response);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
         #endregion
 

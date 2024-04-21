@@ -9,6 +9,6 @@ namespace Application.Dtos.CommonDtos
 {
     public interface IBaseSurpDto
     {
-        public int? systemId { get; set; }
+        public int systemId { get; set; }
     }
 }
