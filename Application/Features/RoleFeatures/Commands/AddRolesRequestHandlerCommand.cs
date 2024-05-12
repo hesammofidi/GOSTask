@@ -1,16 +1,9 @@
 ﻿using Application.Contract.Identity;
 using Application.Dtos.RoleDtos;
 using Application.Dtos.RoleDtos.Validators;
-using Application.Models.IdentityModels.UserModels.Validators;
 using Application.Responses;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.RoleFeatures.Commands
 {

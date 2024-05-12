@@ -1,14 +1,8 @@
-﻿using Domain;
-using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities;
 
 namespace Application.Contract.Persistance.SystemsRolesManagment
 {
-    public interface IPeopleRepository : IGenericSqlRepository<People, int>
+    public interface IPeopleRepository : IGenericEFRepository<People, int>
     {
        
     }

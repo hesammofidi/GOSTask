@@ -1,13 +1,8 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Contract.Persistance.SystemsRolesManagment
 {
-    public interface IOrderProductRepository : IGenericSqlRepository<OrderProduct, int>
+    public interface IOrderProductRepository : IGenericEFRepository<OrderProduct, int>
     {
        
     }

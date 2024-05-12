@@ -10,6 +10,7 @@ namespace Domain.Entities
 {
     public class OrderProduct : BaseDomainEntity<int>
     {
+
         public Products? product { get; set; }
         public string? ProductId { get; set; }
         public Orders? Order { get; set; }

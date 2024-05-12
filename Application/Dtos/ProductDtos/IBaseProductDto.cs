@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Order;
+using Order.Collections.Generic;
+using Order.Linq;
+using Order.Text;
+using Order.Threading.Tasks;
 
 namespace Application.Dtos.ProductDtos
 {

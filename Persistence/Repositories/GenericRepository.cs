@@ -8,7 +8,7 @@ using Persistence.Helpers;
 
 namespace Persistence.Repositories
 {
-    public class GenericRepository<TEntity, TId> : IGenericSqlRepository<TEntity, TId>
+    public class GenericRepository<TEntity, TId> : IGenericEFRepository<TEntity, TId>
         where TEntity : BaseDomainEntity<TId>
     {
         private readonly IdentityDatabaseContext _context;
