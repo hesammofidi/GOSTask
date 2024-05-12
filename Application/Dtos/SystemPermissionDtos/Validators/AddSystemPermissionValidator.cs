@@ -10,10 +10,10 @@ namespace Application.Dtos.SystemPermissionDtos.Validators
 {
     public class AddSystemPermissionValidator : AbstractValidator<AddSPDto>
     {
-        private readonly ISystemsPermissionsRepository _systemsPermissionRepository;
-        public AddSystemPermissionValidator(ISystemsPermissionsRepository systemsPermissionRepository)
+        private readonly IOrderPeopleRepository _systemsProductsRepository;
+        public AddSystemPermissionValidator(IOrderPeopleRepository systemsProductsRepository)
         {
-            _systemsPermissionRepository = systemsPermissionRepository;
+            _systemsProductsRepository = systemsProductsRepository;
             Include(new BaseSRUpValidator());
 
             RuleFor(o => o.PermissionId).NotEmpty()
@@ -22,7 +22,7 @@ namespace Application.Dtos.SystemPermissionDtos.Validators
             RuleFor(o => new { o.systemId, o.PermissionId })
             .MustAsync(async (x, cancellation) =>
             {
-                return !await _systemsPermissionRepository.ExistSystemPermission(x.systemId, x.PermissionId);
+                return !await _systemsProductsRepository.ExistSystemPermission(x.systemId, x.PermissionId);
             })
                .WithMessage("در حال حاضر نقش مورد نظر برای این سیستم موجود است");
            

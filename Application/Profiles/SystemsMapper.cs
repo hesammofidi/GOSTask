@@ -1,7 +1,7 @@
 ﻿using Application.Dtos.RoleDtos;
 using Application.Dtos.SystemsDto;
 using AutoMapper;
-using Domain;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +14,9 @@ namespace Application.Profiles
     {
         public SystemsMapper()
         {
-            CreateMap<Systems, AddSystemDto>().ReverseMap();
-            CreateMap<Systems, EditSystemDto>().ReverseMap();
-            CreateMap<Systems, SystemInfoDto>().ReverseMap();
+            CreateMap<Orders, AddSystemDto>().ReverseMap();
+            CreateMap<Orders, EditSystemDto>().ReverseMap();
+            CreateMap<Orders, SystemInfoDto>().ReverseMap();
 
         }
     }

@@ -19,7 +19,7 @@ namespace IdentityManagmentSystem.API.Controllers
     public class SURPController : ApiController
     {
         private readonly ISystemsRepository _systemrepos;
-        private readonly IPermissionsRepository _permRepos;
+        private readonly IProductsRepository _permRepos;
         private readonly ISystemsRolePermissionUsersRepository _srupRepos;
         private readonly UserManager<DomainUser> _usermanager;
         private readonly IMediator _mediator;
@@ -27,7 +27,7 @@ namespace IdentityManagmentSystem.API.Controllers
             (ISystemsRepository systemrepos,
             UserManager<DomainUser> usermanager,
             IMediator mediator,
-            IPermissionsRepository permRepos)
+            IProductsRepository permRepos)
         {
             _systemrepos = systemrepos;
             _usermanager = usermanager;

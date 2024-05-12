@@ -15,10 +15,10 @@ namespace IdentityManagmentSystem.API.Controllers
 
     public class SURController : ApiController
     {
-        private readonly ISystemsRoleUsersRepository _SURRepository;
+        private readonly IPeopleRepository _SURRepository;
         private readonly IMediator _mediator;
         public SURController(
-            ISystemsRoleUsersRepository sURRepository, 
+            IPeopleRepository sURRepository, 
             IMediator mediator)
         {
             _SURRepository = sURRepository;

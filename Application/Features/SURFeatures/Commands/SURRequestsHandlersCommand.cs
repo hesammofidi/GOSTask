@@ -21,16 +21,16 @@ namespace Application.Features.SURFeatures.Commands
 
         public class AddSURHandlerCommand : IRequestHandler<AddSURRequestCommand, BaseCommandResponse>
         {
-            private readonly ISystemsRoleUsersRepository _SURRepository;
-            private readonly ISystemsRolesPermissionRepository _SRPRepository;
+            private readonly IPeopleRepository _SURRepository;
+            private readonly ISystemsRolesProductsRepository _SRPRepository;
             private readonly IMapper _mapper;
             private readonly IMediator _mediator;
 
             public AddSURHandlerCommand(
 
                 IMapper mapper,
-                ISystemsRoleUsersRepository sURRepository,
-                ISystemsRolesPermissionRepository sRPRepository,
+                IPeopleRepository sURRepository,
+                ISystemsRolesProductsRepository sRPRepository,
                 IMediator mediator)
             {
 
@@ -92,11 +92,11 @@ namespace Application.Features.SURFeatures.Commands
 
         public class EditSURHandlerCommand : IRequestHandler<EditSURRequestCommand, BaseCommandResponse>
         {
-            private readonly ISystemsRoleUsersRepository _SURRepository;
+            private readonly IPeopleRepository _SURRepository;
             private readonly IMapper _mapper;
 
             public EditSURHandlerCommand(
-                IMapper mapper, ISystemsRoleUsersRepository sURRepository)
+                IMapper mapper, IPeopleRepository sURRepository)
             {
 
                 _mapper = mapper;
@@ -133,8 +133,8 @@ namespace Application.Features.SURFeatures.Commands
         }
         public class DeleteSURHandlerCommand : IRequestHandler<DeleteSURRequestCommand>
         {
-            private readonly ISystemsRoleUsersRepository _SURRepository;
-            public DeleteSURHandlerCommand(ISystemsRoleUsersRepository sURRepository)
+            private readonly IPeopleRepository _SURRepository;
+            public DeleteSURHandlerCommand(IPeopleRepository sURRepository)
             {
                 
                 _SURRepository = sURRepository;

@@ -1,7 +1,6 @@
 ﻿using Application.Dtos.RoleDtos;
 using Application.Models.Abstraction;
 using Application.Models.IdentityModels.UserModels;
-using Domain;
 using Domain.Users;
 using System;
 using System.Collections.Generic;

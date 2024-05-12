@@ -15,12 +15,12 @@ namespace IdentityManagmentSystem.API.Controllers
     public class SystemPermissionController : ApiController
     {
         private readonly IMediator _mediator;
-        private readonly ISystemsPermissionsRepository _systemPermissionRepository;
+        private readonly IOrderPeopleRepository _systemProductsRepository;
         public SystemPermissionController(IMediator mediator, 
-                                          ISystemsPermissionsRepository systemPermissionRepository)
+                                          IOrderPeopleRepository systemProductsRepository)
         {
             _mediator = mediator;
-            _systemPermissionRepository = systemPermissionRepository;
+            _systemProductsRepository = systemProductsRepository;
         }
         #region FilterSearch
         [HttpGet("filter")]
@@ -50,7 +50,7 @@ namespace IdentityManagmentSystem.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SystemRoleDto>> GetSPByIdAsync([FromRoute] int id)
         {
-            var SP = await _systemPermissionRepository.Exist(id);
+            var SP = await _systemProductsRepository.Exist(id);
 
             if (!SP)
             {
@@ -83,7 +83,7 @@ namespace IdentityManagmentSystem.API.Controllers
             {
                 return BadRequest("SPId is Null");
             }
-            var user = await _systemPermissionRepository.Exist(data.Id);
+            var user = await _systemProductsRepository.Exist(data.Id);
             if (!user)
             {
                 return NotFound("SystemPermission Not Found!");
@@ -103,7 +103,7 @@ namespace IdentityManagmentSystem.API.Controllers
             {
                 return BadRequest("systemId is Null");
             }
-            var user = await _systemPermissionRepository.Exist(deleteId);
+            var user = await _systemProductsRepository.Exist(deleteId);
             if (user == null)
             {
                 return NotFound("system Not Found!");

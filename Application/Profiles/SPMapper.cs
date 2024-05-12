@@ -1,7 +1,7 @@
 ﻿using Application.Dtos.SystemPermissionDtos;
 using Application.Dtos.SystemRoleDtos;
 using AutoMapper;
-using Domain;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +14,9 @@ namespace Application.Profiles
     {
         public SPMapper()
         {
-            CreateMap<SystemPermission, AddSPDto>().ReverseMap();
-            CreateMap<SystemPermission, EditSPDto>().ReverseMap();
-            CreateMap<SystemPermission, SystemPermissionDto>()
+            CreateMap<OrderPeople, AddSPDto>().ReverseMap();
+            CreateMap<OrderPeople, EditSPDto>().ReverseMap();
+            CreateMap<OrderPeople, SystemPermissionDto>()
                 .ForMember(SP => SP.PermissionName, opt => 
                 opt.MapFrom(src => src.Permission.Title))
                  .ForMember(SP => SP.SystemName, opt =>

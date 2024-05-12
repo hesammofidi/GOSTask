@@ -13,9 +13,9 @@ namespace IdentityManagmentSystem.API.Controllers
 {
     public class SRPController : ApiController
     {
-        private readonly ISystemsRolesPermissionRepository _SRPRepository;
+        private readonly ISystemsRolesProductsRepository _SRPRepository;
         private readonly IMediator _mediator;
-        public SRPController(ISystemsRolesPermissionRepository sRPRepository, IMediator mediator)
+        public SRPController(ISystemsRolesProductsRepository sRPRepository, IMediator mediator)
         {
             _SRPRepository = sRPRepository;
             _mediator = mediator;

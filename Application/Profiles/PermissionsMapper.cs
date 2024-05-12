@@ -1,7 +1,7 @@
-﻿using Application.Dtos.PermissionsDtos;
+﻿using Application.Dtos.ProductDtos;
 using Application.Dtos.RoleDtos;
 using AutoMapper;
-using Domain;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +14,9 @@ namespace Application.Profiles
     {
         public PermissionsMapper()
         {
-            CreateMap<Permisions, PermissionInfoDto>().ReverseMap();
-            CreateMap<Permisions, AddPermissionDto>().ReverseMap();
-            CreateMap<Permisions, EditPermissionDto>().ReverseMap();
+            CreateMap<Products, ProductInfoDto>().ReverseMap();
+            CreateMap<Products, AddProductDto>().ReverseMap();
+            CreateMap<Products, EditProductDto>().ReverseMap();
         }
     }
 }

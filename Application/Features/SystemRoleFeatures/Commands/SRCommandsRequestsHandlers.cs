@@ -4,7 +4,7 @@ using Application.Dtos.SystemRoleDtos.Validators;
 using Application.Dtos.SystemsDto.Validators;
 using Application.Responses;
 using AutoMapper;
-using Domain;
+using Domain.Entities;
 using FluentValidation;
 using MediatR;
 
@@ -21,8 +21,8 @@ namespace Application.Features.SystemRoleFeatures.Commands
         public class AddSRHandlerCommand : IRequestHandler<AddSRRequestCommand, BaseCommandResponse>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRolesRepository _systemRoleRepository;
-            public AddSRHandlerCommand(IMapper mapper, ISystemsRolesRepository systemRoleRepository)
+            private readonly IOrderProductRepository _systemRoleRepository;
+            public AddSRHandlerCommand(IMapper mapper, IOrderProductRepository systemRoleRepository)
             {
                 _mapper = mapper;
                 _systemRoleRepository = systemRoleRepository;
@@ -41,7 +41,7 @@ namespace Application.Features.SystemRoleFeatures.Commands
                 }
                 else
                 {
-                    var systemInfo = _mapper.Map<SystemRoles>(request.addSRDto);
+                    var systemInfo = _mapper.Map<OrderProduct>(request.addSRDto);
                     await _systemRoleRepository.AddAsync(systemInfo);
                     response.Success = true;
                     response.Message = "Creation Successful";
@@ -59,8 +59,8 @@ namespace Application.Features.SystemRoleFeatures.Commands
         public class EditSRHandlerCommand : IRequestHandler<EditSRRequestCommand, BaseCommandResponse>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRolesRepository _systemRoleRepository;
-            public EditSRHandlerCommand(IMapper mapper, ISystemsRolesRepository systemRoleRepository)
+            private readonly IOrderProductRepository _systemRoleRepository;
+            public EditSRHandlerCommand(IMapper mapper, IOrderProductRepository systemRoleRepository)
             {
                 _mapper = mapper;
                 _systemRoleRepository = systemRoleRepository;
@@ -97,8 +97,8 @@ namespace Application.Features.SystemRoleFeatures.Commands
         }
         public class DeleteSRHandlerCommand : IRequestHandler<DeleteSRRequestCommand>
         {
-            private readonly ISystemsRolesRepository _systemRoleRepository;
-            public DeleteSRHandlerCommand(ISystemsRolesRepository systemRoleRepository)
+            private readonly IOrderProductRepository _systemRoleRepository;
+            public DeleteSRHandlerCommand(IOrderProductRepository systemRoleRepository)
             {
                 _systemRoleRepository = systemRoleRepository;
             }

@@ -14,8 +14,8 @@ namespace IdentityManagmentSystem.API.Controllers
     public class SystemRoleController : ApiController
     {
         private readonly IMediator _mediator;
-        private readonly ISystemsRolesRepository _systemRoleRepository;
-        public SystemRoleController(IMediator mediator, ISystemsRolesRepository systemRoleRepository)
+        private readonly IOrderProductRepository _systemRoleRepository;
+        public SystemRoleController(IMediator mediator, IOrderProductRepository systemRoleRepository)
         {
             _mediator = mediator;
             _systemRoleRepository = systemRoleRepository;

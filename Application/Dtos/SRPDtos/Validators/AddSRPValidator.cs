@@ -10,9 +10,9 @@ namespace Application.Dtos.SRPDtos.Validators
 {
     public class AddSRPValidator : AbstractValidator<AddSRPDto>
     {
-        private readonly ISystemsRolesPermissionRepository _SRPRepository;
+        private readonly ISystemsRolesProductsRepository _SRPRepository;
 
-        public AddSRPValidator(ISystemsRolesPermissionRepository sRPRepository)
+        public AddSRPValidator(ISystemsRolesProductsRepository sRPRepository)
         {
             _SRPRepository = sRPRepository;
             Include(new BaseSRPValidator());

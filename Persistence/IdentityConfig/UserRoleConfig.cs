@@ -1,5 +1,4 @@
 ﻿using Domain.Users;
-using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -29,27 +28,8 @@ namespace Persistence.IdentityConfig
 
         public void Configure(EntityTypeBuilder<Roles> builder)
         {
-            //builder.HasData(AdminRole, BasicUserRole);
-           
-            builder.HasMany(p => p.SystemRole)
-           .WithOne(p => p.Role)
-           .HasForeignKey(p => p.RoleId)
-            .OnDelete(DeleteBehavior.Restrict);
+            builder.HasData(AdminRole, BasicUserRole);
 
-            builder.HasMany(p => p.SystemRoleUser)
-          .WithOne(p => p.Role)
-          .HasForeignKey(p => p.RoleId)
-          .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(p => p.SystemRolesPermission)
-          .WithOne(p => p.Role)
-          .HasForeignKey(p => p.RoleId)
-          .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(p => p.SystemUserRolePermission)
-          .WithOne(p => p.Role)
-          .HasForeignKey(p => p.RoleId)
-          .OnDelete(DeleteBehavior.Restrict);
         }
     }
 
@@ -79,41 +59,28 @@ namespace Persistence.IdentityConfig
 
         public void Configure(EntityTypeBuilder<DomainUser> builder)
         {
-            //builder.HasData(User1, User2);
-
-            builder.HasMany(p => p.SystemRoleUser)
-            .WithOne(p => p.users)
-            .HasForeignKey(p => p.usersId).OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(p => p.SystemUserPermission)
-            .WithOne(p => p.users)
-            .HasForeignKey(p => p.usersId).OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(p => p.SystemUserRolePermission)
-            .WithOne(p => p.users)
-            .HasForeignKey(p => p.usersId)
-            .OnDelete(DeleteBehavior.Restrict);
+            builder.HasData(User1, User2);
 
         }
     }
 
-    //public class UserRoleConfig : IEntityTypeConfiguration<IdentityUserRole<string>>
-    //{
-    //    public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
-    //    {
-    //        builder.HasData(
-    //            new IdentityUserRole<string>
-    //            {
-    //                UserId = UserConfig.User1.Id,
-    //                RoleId = RoleConfig.AdminRole.Id
-    //            },
-    //            new IdentityUserRole<string>
-    //            {
-    //                UserId = UserConfig.User2.Id,
-    //                RoleId = RoleConfig.BasicUserRole.Id
-    //            }
-    //        );
-    //    }
-    //}
+    public class UserRoleConfig : IEntityTypeConfiguration<IdentityUserRole<string>>
+    {
+        public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
+        {
+            builder.HasData(
+                new IdentityUserRole<string>
+                {
+                    UserId = UserConfig.User1.Id,
+                    RoleId = RoleConfig.AdminRole.Id
+                },
+                new IdentityUserRole<string>
+                {
+                    UserId = UserConfig.User2.Id,
+                    RoleId = RoleConfig.BasicUserRole.Id
+                }
+            );
+        }
+    }
 
 }

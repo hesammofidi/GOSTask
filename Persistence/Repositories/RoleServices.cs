@@ -1,7 +1,6 @@
 ﻿using Application.Contract.Identity;
 using Application.Dtos.RoleDtos;
 using Application.Models.Abstraction;
-using Domain;
 using Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

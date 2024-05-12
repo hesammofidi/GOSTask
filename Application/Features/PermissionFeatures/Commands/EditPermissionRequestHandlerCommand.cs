@@ -1,6 +1,6 @@
 ﻿using Application.Contract.Persistance.SystemsRolesManagment;
-using Application.Dtos.PermissionsDtos;
 using Application.Dtos.PermissionsDtos.Validators;
+using Application.Dtos.ProductDtos;
 using Application.Responses;
 using AutoMapper;
 using Domain;
@@ -17,24 +17,24 @@ namespace Application.Features.PermissionFeatures.Commands
     {
         public class EditPermissionRequestCommand : IRequest<BaseCommandResponse>
         {
-            public EditPermissionDto? permissionDto { get; set; }
+            public EditProductDto? permissionDto { get; set; }
         }
         public class EditPermissionHandlerCommand : IRequestHandler<EditPermissionRequestCommand,BaseCommandResponse>
         {
             private readonly IMapper _mapper;
-            private readonly IPermissionsRepository _permissionRepository;
+            private readonly IProductsRepository _ProductsRepository;
 
-            public EditPermissionHandlerCommand(IPermissionsRepository permissionRepository,  
+            public EditPermissionHandlerCommand(IProductsRepository ProductsRepository,  
                 IMapper mapper)
             {
-                _permissionRepository = permissionRepository;
+                _ProductsRepository = ProductsRepository;
                 _mapper = mapper;
             }
 
             public async Task<BaseCommandResponse> Handle(EditPermissionRequestCommand request, CancellationToken cancellationToken)
             {
                 var response = new BaseCommandResponse();
-                var validator = new EditPermissionValidator(_permissionRepository);
+                var validator = new EditPermissionValidator(_ProductsRepository);
                 var validationResult = await validator.ValidateAsync(request.permissionDto);
                 if (validationResult.IsValid == false)
                 {
@@ -44,9 +44,9 @@ namespace Application.Features.PermissionFeatures.Commands
                 }
                 else
                 {
-                    var entity = await _permissionRepository.GetByIdAsync(request.permissionDto.Id);
+                    var entity = await _ProductsRepository.GetByIdAsync(request.permissionDto.Id);
                     _mapper.Map(request.permissionDto, entity);
-                    await _permissionRepository.UpdateAsync(entity);
+                    await _ProductsRepository.UpdateAsync(entity);
                     response.Success = true;
                     response.Message = "Update permission Successful";
                 }

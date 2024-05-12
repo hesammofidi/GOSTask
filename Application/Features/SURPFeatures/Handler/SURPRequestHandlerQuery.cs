@@ -111,9 +111,9 @@ namespace Application.Features.SURPFeatures.Handler
         public class ExistPermissionHandler : IRequestHandler<ExistPermissionRequest, bool>
         {
             private readonly ISystemsRolePermissionUsersRepository _SURPRepository;
-            private readonly IPermissionsRepository _permissionRepos;
+            private readonly IProductsRepository _permissionRepos;
             public ExistPermissionHandler(ISystemsRolePermissionUsersRepository sURPRepository, 
-                IPermissionsRepository permissionRepos)
+                IProductsRepository permissionRepos)
             {
                 _SURPRepository = sURPRepository;
                 _permissionRepos = permissionRepos;

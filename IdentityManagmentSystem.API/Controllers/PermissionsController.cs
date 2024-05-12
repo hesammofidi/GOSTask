@@ -1,12 +1,12 @@
 ﻿using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Dtos.CommonDtos;
-using Application.Dtos.PermissionsDtos;
+using Application.Dtos.ProductDtos;
 using Application.Responses;
 using IdentityManagmentSystem.API.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using static Application.Features.PermissionFeatures.Commands.AddPermissionRequestHandlerCommand;
+using static Application.Features.PermissionFeatures.Commands.AddProductRequestHandlerCommand;
 using static Application.Features.PermissionFeatures.Commands.DeletePermissionRequestHandlerCommand;
 using static Application.Features.PermissionFeatures.Commands.EditPermissionRequestHandlerCommand;
 using static Application.Features.PermissionFeatures.Queries.GetPermissionsRequestHandlerQuery;
@@ -16,17 +16,17 @@ namespace IdentityManagmentSystem.API.Controllers
     public class PermissionsController : ApiController
     {
         private readonly IMediator _mediator;
-        private readonly IPermissionsRepository _permissionRepository;
+        private readonly IProductsRepository _ProductsRepository;
         public PermissionsController(IMediator mediator, 
-            IPermissionsRepository permissionRepository)
+            IProductsRepository ProductsRepository)
         {
             _mediator = mediator;
-            _permissionRepository = permissionRepository;
+            _ProductsRepository = ProductsRepository;
         }
 
         #region FilterSearch
         [HttpGet("filter")]
-        public async Task<ActionResult<IEnumerable<PermissionInfoDto>>> FilterPermissionsAsync(
+        public async Task<ActionResult<IEnumerable<ProductInfoDto>>> FilterPermissionsAsync(
             [FromQuery] FilterDataDto data)
         {
             var query = new GetPermissionFilterRequestQuery { FilterDataDto = data };
@@ -37,7 +37,7 @@ namespace IdentityManagmentSystem.API.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<PermissionInfoDto>>> SearchPermissionsAsync(
+        public async Task<ActionResult<IEnumerable<ProductInfoDto>>> SearchPermissionsAsync(
           [FromQuery] SearchDataDto data)
         {
             var query = new GetPermissionSearchRequestQuery { searchDataDto = data };
@@ -50,9 +50,9 @@ namespace IdentityManagmentSystem.API.Controllers
 
         #region getbyId
         [HttpGet("{id}")]
-        public async Task<ActionResult<PermissionInfoDto>> GetPermissionByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<ProductInfoDto>> GetPermissionByIdAsync([FromRoute] int id)
         {
-            var permission = await _permissionRepository.Exist(id);
+            var permission = await _ProductsRepository.Exist(id);
 
             if (!permission)
             {
@@ -68,9 +68,9 @@ namespace IdentityManagmentSystem.API.Controllers
         #region Addpermission
         [HttpPost("Add")]
         public async Task<ActionResult<BaseCommandResponse>> AddPermission
-         ([FromBody] AddPermissionDto data)
+         ([FromBody] AddProductDto data)
         {
-            var command = new AddPermissionRequestCommand { permissionDto = data };
+            var command = new AddProductRequestCommand { permissionDto = data };
             var response = await _mediator.Send(command);
             return Ok(response);
         }
@@ -79,13 +79,13 @@ namespace IdentityManagmentSystem.API.Controllers
         #region EditPermission
         [HttpPut("Edit")]
         public async Task<ActionResult<BaseCommandResponse>>
-          UpdatePermission([FromBody] EditPermissionDto data)
+          UpdatePermission([FromBody] EditProductDto data)
         {
             if (data.Id == null)
             {
                 return BadRequest("permissionId is Null");
             }
-            var user = await _permissionRepository.Exist(data.Id);
+            var user = await _ProductsRepository.Exist(data.Id);
             if (!user)
             {
                 return NotFound("permission Not Found!");
@@ -105,7 +105,7 @@ namespace IdentityManagmentSystem.API.Controllers
             {
                 return BadRequest("permissionId is Null");
             }
-            var user = await _permissionRepository.Exist( id);
+            var user = await _ProductsRepository.Exist( id);
             if (user == null)
             {
                 return NotFound("permission Not Found!");

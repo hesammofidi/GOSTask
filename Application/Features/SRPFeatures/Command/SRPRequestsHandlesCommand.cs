@@ -24,11 +24,11 @@ namespace Application.Features.SRPFeatures.Command
 
         public class AddSRPHandlerCommand : IRequestHandler<AddSRPRequestCommand, BaseCommandResponse>
         {
-            private readonly ISystemsRolesPermissionRepository _SRPRepository;
+            private readonly ISystemsRolesProductsRepository _SRPRepository;
             private readonly IMapper _mapper;
 
             public AddSRPHandlerCommand(
-                ISystemsRolesPermissionRepository sRPRepository,
+                ISystemsRolesProductsRepository sRPRepository,
                 IMapper mapper)
             {
                 _SRPRepository = sRPRepository;
@@ -66,11 +66,11 @@ namespace Application.Features.SRPFeatures.Command
 
         public class EditSRPHandlerCommand : IRequestHandler<EditSRPRequestCommand, BaseCommandResponse>
         {
-            private readonly ISystemsRolesPermissionRepository _SRPRepository;
+            private readonly ISystemsRolesProductsRepository _SRPRepository;
             private readonly IMapper _mapper;
 
             public EditSRPHandlerCommand(
-                ISystemsRolesPermissionRepository sRPRepository,
+                ISystemsRolesProductsRepository sRPRepository,
                 IMapper mapper)
             {
                 _SRPRepository = sRPRepository;
@@ -107,8 +107,8 @@ namespace Application.Features.SRPFeatures.Command
         }
         public class DeleteSRPHandlerCommand : IRequestHandler<DeleteSRPRequestCommand>
         {
-            private readonly ISystemsRolesPermissionRepository _SRPRepository;
-            public DeleteSRPHandlerCommand(ISystemsRolesPermissionRepository sRPRepository)
+            private readonly ISystemsRolesProductsRepository _SRPRepository;
+            public DeleteSRPHandlerCommand(ISystemsRolesProductsRepository sRPRepository)
             {
                 _SRPRepository = sRPRepository;
             }

@@ -11,8 +11,8 @@ namespace Application.Dtos.SURDtos.Validators
 {
     public class EditSURValidator : AbstractValidator<EditSURDto>
     {
-        private readonly ISystemsRoleUsersRepository _SURRepository;
-        public EditSURValidator(ISystemsRoleUsersRepository sURRepository)
+        private readonly IPeopleRepository _SURRepository;
+        public EditSURValidator(IPeopleRepository sURRepository)
         {
             Include(new SURPBaseValidator());
             _SURRepository = sURRepository;

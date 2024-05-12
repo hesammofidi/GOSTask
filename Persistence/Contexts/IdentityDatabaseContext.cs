@@ -1,5 +1,5 @@
-﻿using Domain;
-using Domain.Attributes;
+﻿using Domain.Attributes;
+using Domain.Entities;
 using Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -21,29 +21,24 @@ namespace Persistence.Contexts
             {
 
             }
-        public DbSet<Systems> Systems { get; set; }
-        public DbSet<Permisions> Permission { get; set; }
-        public DbSet<SystemRoles> SystemRoles { get; set; }
-        public DbSet<SystemPermission> SystemPermission { get; set; }
-        public DbSet<SystemRolesPermission> SystemRolesPermission { get; set; }
-        public DbSet<SystemUserPermission> SystemUserPermission { get; set; }
-        public DbSet<SystemRoleUser> SystemRoleUser { get; set; }
-        public DbSet<SystemUserRolePermission> SystemUserRolePermission { get; set; }
+        public DbSet<Orders> Orders { get; set; }
+        public DbSet<Products> Products { get; set; }
+        public DbSet<OrderProduct> OrderProduct { get; set; }
+        public DbSet<OrderPeople> OrderPeople { get; set; }
+        public DbSet<People> People { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //ApplyConfigs
             builder.ApplyConfiguration(new RoleConfig());
             builder.ApplyConfiguration(new UserConfig());
-            //builder.ApplyConfiguration(new UserRoleConfig());
-            builder.ApplyConfiguration(new SystemsConfig());
-            builder.ApplyConfiguration(new PermissionConfigs());
-            builder.ApplyConfiguration(new SystemRolesConfig());
-            builder.ApplyConfiguration(new SystemPermissionConfig());
-            builder.ApplyConfiguration(new SystemUserPermissionConfigs());
-            builder.ApplyConfiguration(new SystemRolesUserConfigs());
-            builder.ApplyConfiguration(new SystemRolesPermissionConfigs());
-            builder.ApplyConfiguration(new SystemUserRolePermissionConfig());
+            builder.ApplyConfiguration(new UserRoleConfig());
+            builder.ApplyConfiguration(new OrdersConfig());
+            builder.ApplyConfiguration(new ProductsConfigs());
+            builder.ApplyConfiguration(new PeopleConfigs());
+            builder.ApplyConfiguration(new OrderProductConfig());
+            builder.ApplyConfiguration(new OrderPeopleConfig());
+            
 
             //EnitityTables
             builder.Entity<IdentityUser<string>>().ToTable("Users", "identity");

@@ -10,8 +10,8 @@ namespace Application.Dtos.SRPDtos.Validators
 {
     public class EditSRPValidator :AbstractValidator<EditSRPDto>
     {
-        private readonly ISystemsRolesPermissionRepository _SRPRepository;
-        public EditSRPValidator(ISystemsRolesPermissionRepository sRPRepository)
+        private readonly ISystemsRolesProductsRepository _SRPRepository;
+        public EditSRPValidator(ISystemsRolesProductsRepository sRPRepository)
         {
             Include(new BaseSRPValidator());
 

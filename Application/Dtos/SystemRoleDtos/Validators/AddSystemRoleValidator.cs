@@ -10,8 +10,8 @@ namespace Application.Dtos.SystemRoleDtos.Validators
 {
     public class AddSystemRoleValidator : AbstractValidator<AddSystemRoleDto>
     {
-        private readonly ISystemsRolesRepository _systemsRolesRepository;
-        public AddSystemRoleValidator(ISystemsRolesRepository systemsRolesRepository)
+        private readonly IOrderProductRepository _systemsRolesRepository;
+        public AddSystemRoleValidator(IOrderProductRepository systemsRolesRepository)
         {
             Include(new BaseSRUpValidator());
             _systemsRolesRepository = systemsRolesRepository;

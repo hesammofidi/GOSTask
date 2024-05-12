@@ -23,8 +23,8 @@ namespace Application.Features.SystemRoleFeatures.Query
         public class SRFilterQueryHandler : IRequestHandler<SRFilterQueryRequest, PagedList<SystemRoleDto>>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRolesRepository _systemRoleRepository;
-            public SRFilterQueryHandler(IMapper mapper, ISystemsRolesRepository systemRoleRepository)
+            private readonly IOrderProductRepository _systemRoleRepository;
+            public SRFilterQueryHandler(IMapper mapper, IOrderProductRepository systemRoleRepository)
             {
                 _mapper = mapper;
                 _systemRoleRepository = systemRoleRepository;
@@ -55,8 +55,8 @@ namespace Application.Features.SystemRoleFeatures.Query
         public class SRSerchQueryHandler : IRequestHandler<SRSerchQueryRequest, PagedList<SystemRoleDto>>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRolesRepository _systemRoleRepository;
-            public SRSerchQueryHandler(IMapper mapper, ISystemsRolesRepository systemRoleRepository)
+            private readonly IOrderProductRepository _systemRoleRepository;
+            public SRSerchQueryHandler(IMapper mapper, IOrderProductRepository systemRoleRepository)
             {
                 _mapper = mapper;
                 _systemRoleRepository = systemRoleRepository;
@@ -87,9 +87,9 @@ namespace Application.Features.SystemRoleFeatures.Query
         public class GetSRHandlerQuery : IRequestHandler<GetSRRequestQuery, SystemRoleDto>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRolesRepository _systemRoleRepository;
+            private readonly IOrderProductRepository _systemRoleRepository;
 
-            public GetSRHandlerQuery(ISystemsRolesRepository systemsRepository, IMapper mapper)
+            public GetSRHandlerQuery(IOrderProductRepository systemsRepository, IMapper mapper)
             {
                 _systemRoleRepository = systemsRepository;
                 _mapper = mapper;

@@ -16,15 +16,15 @@ namespace Application.Features.PermissionFeatures.Commands
         }
         public class DeletePermissionHandlerCommand : IRequestHandler<DeletePermissionRequestCommand>
         {
-            private readonly IPermissionsRepository _permissionRepository;
-            public DeletePermissionHandlerCommand(IPermissionsRepository permissionRepository)
+            private readonly IProductsRepository _ProductsRepository;
+            public DeletePermissionHandlerCommand(IProductsRepository ProductsRepository)
             {
-                _permissionRepository = permissionRepository;
+                _ProductsRepository = ProductsRepository;
             }
             public async Task Handle(DeletePermissionRequestCommand request, CancellationToken cancellationToken)
             {
-                var entity = await _permissionRepository.GetByIdAsync(request.permissionId);
-                await _permissionRepository.DeleteAsync(entity);
+                var entity = await _ProductsRepository.GetByIdAsync(request.permissionId);
+                await _ProductsRepository.DeleteAsync(entity);
             }
         }
     }

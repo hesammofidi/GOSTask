@@ -1,6 +1,5 @@
 ﻿using Application.Contract.Identity;
 using Application.Models.IdentityModels.UserModels;
-using Domain;
 using Domain.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

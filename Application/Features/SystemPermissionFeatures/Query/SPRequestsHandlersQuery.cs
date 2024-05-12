@@ -23,16 +23,16 @@ namespace Application.Features.SystemPermissionFeatures.Query
         public class SPFilterQueryHandler : IRequestHandler<SPFilterQueryRequest, PagedList<SystemPermissionDto>>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsPermissionsRepository _systemPermissionRepository;
-            public SPFilterQueryHandler(IMapper mapper, ISystemsPermissionsRepository systemPermissionRepository)
+            private readonly IOrderPeopleRepository _systemProductsRepository;
+            public SPFilterQueryHandler(IMapper mapper, IOrderPeopleRepository systemProductsRepository)
             {
                 _mapper = mapper;
-                _systemPermissionRepository = systemPermissionRepository;
+                _systemProductsRepository = systemProductsRepository;
             }
             public async Task<PagedList<SystemPermissionDto>> Handle(SPFilterQueryRequest request, CancellationToken cancellationToken)
             {
                 var filterdata = _mapper.Map<FilterData>(request.FilterDataDto);
-                var systemPermission = await _systemPermissionRepository.FilterAsync(filterdata);
+                var systemPermission = await _systemProductsRepository.FilterAsync(filterdata);
                 var systemPermissionItems = _mapper.Map<List<SystemPermissionDto>>(systemPermission.Items);
                 return new PagedList<SystemPermissionDto>
                     (
@@ -55,16 +55,16 @@ namespace Application.Features.SystemPermissionFeatures.Query
         public class SpSerchQueryHandler : IRequestHandler<SpSerchQueryRequest, PagedList<SystemPermissionDto>>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsPermissionsRepository _systemPermissionRepository;
-            public SpSerchQueryHandler(IMapper mapper, ISystemsPermissionsRepository systemPermissionRepository)
+            private readonly IOrderPeopleRepository _systemProductsRepository;
+            public SpSerchQueryHandler(IMapper mapper, IOrderPeopleRepository systemProductsRepository)
             {
                 _mapper = mapper;
-                _systemPermissionRepository = systemPermissionRepository;
+                _systemProductsRepository = systemProductsRepository;
             }
             public async Task<PagedList<SystemPermissionDto>> Handle(SpSerchQueryRequest request, CancellationToken cancellationToken)
             {
                 var searchdata = _mapper.Map<SearchData>(request.SearchDataDto);
-                var systemPermission = await _systemPermissionRepository.SearchAsync(searchdata);
+                var systemPermission = await _systemProductsRepository.SearchAsync(searchdata);
                 var systemPermissionItems = _mapper.Map<List<SystemPermissionDto>>(systemPermission.Items);
                 return new PagedList<SystemPermissionDto>
                     (
@@ -87,17 +87,17 @@ namespace Application.Features.SystemPermissionFeatures.Query
         public class GetSPHandlerQuery : IRequestHandler<GetSPRequestQuery, SystemPermissionDto>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsPermissionsRepository _systemPermissionRepository;
+            private readonly IOrderPeopleRepository _systemProductsRepository;
 
-            public GetSPHandlerQuery(ISystemsPermissionsRepository systemPermissionRepository, IMapper mapper)
+            public GetSPHandlerQuery(IOrderPeopleRepository systemProductsRepository, IMapper mapper)
             {
-                _systemPermissionRepository = systemPermissionRepository;
+                _systemProductsRepository = systemProductsRepository;
                 _mapper = mapper;
             }
 
             public async Task<SystemPermissionDto> Handle(GetSPRequestQuery request, CancellationToken cancellationToken)
             {
-                var entity = await _systemPermissionRepository.GetByIdAsync(request.SPId);
+                var entity = await _systemProductsRepository.GetByIdAsync(request.SPId);
                 var systemrp = _mapper.Map<SystemPermissionDto>(entity);
                 return systemrp;
             }

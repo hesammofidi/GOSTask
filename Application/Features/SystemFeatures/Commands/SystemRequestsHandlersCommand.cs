@@ -4,7 +4,7 @@ using Application.Dtos.SystemsDto;
 using Application.Dtos.SystemsDto.Validators;
 using Application.Responses;
 using AutoMapper;
-using Domain;
+using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -43,7 +43,7 @@ namespace Application.Features.SystemFeatures.Commands
                 }
                 else
                 {
-                    var systemInfo = _mapper.Map<Systems>(request.systemDto);
+                    var systemInfo = _mapper.Map<Orders>(request.systemDto);
                     await _systemsRepository.AddAsync(systemInfo);
                     response.Success = true;
                     response.Message = "Creation Successful";

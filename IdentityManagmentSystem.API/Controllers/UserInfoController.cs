@@ -95,7 +95,16 @@ namespace IdentityManagmentSystem.API.Controllers
             var query = new UsersSearchItemsRequestQuery { SearchDataDto = data };
             var response = await _mediator.Send(query);
             Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
-
+            if (response == null)
+            {
+                Console.WriteLine("_mediator.Send(query) returned null");
+                return NotFound();
+            }
+            if (response.Paging == null)
+            {
+                Console.WriteLine("response.Paging is null");
+                return NotFound();
+            }
             return Ok(response.Items);
         }
         #endregion

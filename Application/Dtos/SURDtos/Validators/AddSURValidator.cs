@@ -5,8 +5,8 @@ namespace Application.Dtos.SURDtos.Validators
 {
     public class AddSURValidator : AbstractValidator<AddSURDto>
     {
-        private readonly ISystemsRoleUsersRepository _SURRepository;
-        public AddSURValidator(ISystemsRoleUsersRepository sURRepository)
+        private readonly IPeopleRepository _SURRepository;
+        public AddSURValidator(IPeopleRepository sURRepository)
         {
             Include(new SURPBaseValidator());
             _SURRepository = sURRepository;

@@ -18,8 +18,8 @@ namespace Application.Features.SURFeatures.Queries
         public class SURFilterQueryHandler : IRequestHandler<SURFilterQueryRequest, PagedList<SURInfoDto>>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRoleUsersRepository _SURRepository;
-            public SURFilterQueryHandler(IMapper mapper, ISystemsRoleUsersRepository sURRepository)
+            private readonly IPeopleRepository _SURRepository;
+            public SURFilterQueryHandler(IMapper mapper, IPeopleRepository sURRepository)
             {
                 _mapper = mapper;
                 _SURRepository = sURRepository;
@@ -51,9 +51,9 @@ namespace Application.Features.SURFeatures.Queries
             PagedList<SURInfoDto>>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRoleUsersRepository _SURRepository;
+            private readonly IPeopleRepository _SURRepository;
             public SURSerchQueryHandler(IMapper mapper,
-                ISystemsRoleUsersRepository sURRepository)
+                IPeopleRepository sURRepository)
             {
                 _mapper = mapper;
                 _SURRepository = sURRepository;
@@ -84,10 +84,10 @@ namespace Application.Features.SURFeatures.Queries
         public class GetSURHandlerQuery : IRequestHandler<GetSURRequestQuery, SURInfoDto>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRolesPermissionRepository _SRPRepository;
+            private readonly ISystemsRolesProductsRepository _SRPRepository;
 
             public GetSURHandlerQuery(IMapper mapper,
-                ISystemsRolesPermissionRepository sRPRepository)
+                ISystemsRolesProductsRepository sRPRepository)
             {
                 _mapper = mapper;
                 _SRPRepository = sRPRepository;

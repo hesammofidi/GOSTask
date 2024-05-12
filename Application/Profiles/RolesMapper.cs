@@ -1,6 +1,6 @@
 ﻿using Application.Dtos.RoleDtos;
 using AutoMapper;
-using Domain;
+using Domain.Users;
 
 namespace Application.Profiles
 {

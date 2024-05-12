@@ -7,7 +7,6 @@ namespace Application.Contract.Persistance
     {
         Task<TEntity?> GetByIdAsync(TId id);
         Task<TEntity?> GetByNameAsync(string Name);
-
         Task<bool> Exist(TId id);
         Task AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);

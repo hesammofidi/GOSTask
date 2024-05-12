@@ -1,7 +1,7 @@
 ﻿using Application.Dtos.CommonDtos;
 using Application.Dtos.RoleDtos;
 using Application.Responses;
-using Domain;
+using Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

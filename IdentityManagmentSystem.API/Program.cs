@@ -29,74 +29,6 @@ builder.Services.ConfigureApplicationCookie(option =>
     option.SlidingExpiration = true;
 });
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddDefaultPolicy(policy =>
-
-//    {
-//        policy
-
-//            .AllowAnyOrigin()
-
-//            .AllowAnyMethod()
-
-//            .AllowAnyHeader();
-
-//        //.WithExposedHeaders("X-PagingData");
-//    });
-
-//});
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowAllOrigins",
-//            builder =>
-//            {
-//                builder.AllowAnyOrigin()
-//                       .AllowAnyHeader()
-//                       .AllowAnyMethod();
-//            });
-//});
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowSpecificOrigin",
-//        builder =>
-//        {
-//            builder.WithOrigins("http://rsdvs.rashadev.com:90")
-//                   .AllowAnyHeader()
-//                   .AllowAnyMethod();
-//        });
-//});
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddDefaultPolicy(policy =>
-//    {
-
-//        policy
-//            .AllowAnyOrigin()
-//            .AllowAnyMethod()
-//            .AllowAnyHeader()
-//            .WithExposedHeaders("X-PagingData");
-
-//    });
-//});
-
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-
-    {
-        policy
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .WithExposedHeaders("X-PagingData");
-    });
-
-});
-
 //builder.Services.AddCors();
 
 AddSwagger(builder.Services);
@@ -115,20 +47,6 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
-app.UseCors(policy =>
-policy.AllowAnyHeader()
-.AllowAnyMethod()
-.AllowAnyOrigin()
-.WithExposedHeaders("X-PagingData")
-);
-
-//app.UseRouting();
-
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllers();
-//});
 
 app.MapControllers();
 //app.MapIdentityApi<User>();

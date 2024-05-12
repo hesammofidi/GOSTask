@@ -23,9 +23,9 @@ namespace Application.Features.SRPFeatures.Query
         public class SRPFilterQueryHandler : IRequestHandler<SRPFilterQueryRequest, PagedList<SRPInfoDto>>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRolesPermissionRepository _SRPRepository;
+            private readonly ISystemsRolesProductsRepository _SRPRepository;
             public SRPFilterQueryHandler(IMapper mapper,
-                ISystemsRolesPermissionRepository sRPRepository)
+                ISystemsRolesProductsRepository sRPRepository)
             {
                 _mapper = mapper;
                 _SRPRepository = sRPRepository;
@@ -57,9 +57,9 @@ namespace Application.Features.SRPFeatures.Query
             PagedList<SRPInfoDto>>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRolesPermissionRepository _SRPRepository;
+            private readonly ISystemsRolesProductsRepository _SRPRepository;
             public SrpSerchQueryHandler(IMapper mapper,
-                ISystemsRolesPermissionRepository sRPRepository)
+                ISystemsRolesProductsRepository sRPRepository)
             {
                 _mapper = mapper;
                 _SRPRepository = sRPRepository;
@@ -90,10 +90,10 @@ namespace Application.Features.SRPFeatures.Query
         public class GetSRPHandlerQuery : IRequestHandler<GetSRPRequestQuery, SRPInfoDto>
         {
             private readonly IMapper _mapper;
-            private readonly ISystemsRolesPermissionRepository _SRPRepository;
+            private readonly ISystemsRolesProductsRepository _SRPRepository;
 
             public GetSRPHandlerQuery(IMapper mapper,
-                ISystemsRolesPermissionRepository sRPRepository)
+                ISystemsRolesProductsRepository sRPRepository)
             {
                 _mapper = mapper;
                 _SRPRepository = sRPRepository;
@@ -117,9 +117,9 @@ namespace Application.Features.SRPFeatures.Query
 
         public class GetPermissionsHandlerCommand : IRequestHandler<GetPermissionsRequestCommand, List<int>>
         {
-            private readonly ISystemsRolesPermissionRepository _SRPRepository;
+            private readonly ISystemsRolesProductsRepository _SRPRepository;
 
-            public GetPermissionsHandlerCommand(ISystemsRolesPermissionRepository sRPRepository)
+            public GetPermissionsHandlerCommand(ISystemsRolesProductsRepository sRPRepository)
             {
                 _SRPRepository = sRPRepository;
             }
