@@ -1,11 +1,13 @@
 ﻿using Application.Contract.Identity;
-using Application.Contract.Persistance.SystemsRolesManagment;
+using Application.Contract.Persistance.EFCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
 using Persistence.IdentityConfig;
 using Persistence.Repositories;
+using System.Data;
 
 namespace Persistence
 {
@@ -15,6 +17,11 @@ namespace Persistence
         public static IServiceCollection ConfigurePersistenceServices(this IServiceCollection services
             , IConfiguration configuration)
         {
+            services.AddTransient<IDbConnection>(b =>
+            {
+                return new SqlConnection(configuration.GetConnectionString("DatabaseConection"));
+            });
+            services.AddIdentityServices(configuration);
             services.AddScoped<IRoleServices, RoleServices>();
             services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();

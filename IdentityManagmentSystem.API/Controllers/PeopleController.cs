@@ -1,4 +1,4 @@
-﻿using Application.Contract.Persistance.SystemsRolesManagment;
+﻿using Application.Contract.Persistance.EFCore;
 using Application.Dtos.PeopleDtos;
 using Application.Responses;
 using IdentityManagmentSystem.API.Abstraction;

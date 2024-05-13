@@ -1,4 +1,4 @@
-﻿using Application.Contract.Persistance;
+﻿using Application.Contract.Persistance.EFCore;
 using Application.Models.Abstraction;
 using Domain.Common;
 using Microsoft.EntityFrameworkCore;
@@ -8,15 +8,15 @@ using Persistence.Helpers;
 
 namespace Persistence.Repositories
 {
-    public class GenericRepository<TEntity, TId> : IGenericEFRepository<TEntity, TId>
+    public class GenericEFRepository<TEntity, TId> : IGenericEFRepository<TEntity, TId>
         where TEntity : BaseDomainEntity<TId>
     {
         private readonly IdentityDatabaseContext _context;
         protected readonly DbSet<TEntity> _set;
-        private readonly ILogger<GenericRepository<TEntity, TId>> _logger;
+        private readonly ILogger<GenericEFRepository<TEntity, TId>> _logger;
 
-        public GenericRepository(IdentityDatabaseContext context, 
-            ILogger<GenericRepository<TEntity, TId>> logger)
+        public GenericEFRepository(IdentityDatabaseContext context, 
+            ILogger<GenericEFRepository<TEntity, TId>> logger)
         {
             _context = context;
             _logger = logger;

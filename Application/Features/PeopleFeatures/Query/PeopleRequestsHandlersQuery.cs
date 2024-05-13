@@ -1,7 +1,5 @@
-﻿using Application.Contract.Persistance.OrdersRolesManagment;
-using Application.Contract.Persistance.SystemsRolesManagment;
+﻿using Application.Contract.Persistance.EFCore;
 using Application.Dtos.CommonDtos;
-using Application.Dtos.OrderRoleDtos;
 using Application.Dtos.PeopleDtos;
 using Application.Models.Abstraction;
 using AutoMapper;

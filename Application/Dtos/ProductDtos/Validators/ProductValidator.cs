@@ -1,10 +1,4 @@
-﻿using Application.Dtos.ProductDtos;
-using FluentValidation;
-using Order;
-using Order.Collections.Generic;
-using Order.Linq;
-using Order.Text;
-using Order.Threading.Tasks;
+﻿using FluentValidation;
 
 namespace Application.Dtos.ProductDtos.Validators
 {

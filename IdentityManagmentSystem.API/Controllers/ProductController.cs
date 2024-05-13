@@ -1,4 +1,4 @@
-﻿using Application.Contract.Persistance.SystemsRolesManagment;
+﻿using Application.Contract.Persistance.EFCore;
 using Application.Dtos.CommonDtos;
 using Application.Dtos.ProductDtos;
 using Application.Responses;
@@ -17,12 +17,21 @@ namespace IdentityManagmentSystem.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IProductsRepository _ProductsRepository;
-        public ProductsController(IMediator mediator, 
+        public ProductsController(IMediator mediator,
             IProductsRepository ProductsRepository)
         {
             _mediator = mediator;
             _ProductsRepository = ProductsRepository;
         }
+        #region GetAllWithDapper
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IEnumerable<ProductInfoDto>>> GetAllProductsAsync()
+        {
+            var query = new GetAllProductRequestQuery { };
+            var response = await _mediator.Send(query);
+            return Ok(response);
+        }
+        #endregion 
 
         #region FilterSearch
         [HttpGet("filter")]

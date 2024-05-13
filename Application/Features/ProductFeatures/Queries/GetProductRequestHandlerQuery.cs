@@ -1,5 +1,6 @@
 ﻿using Application.Contract.Identity;
-using Application.Contract.Persistance.SystemsRolesManagment;
+using Application.Contract.Persistance.Dapper;
+using Application.Contract.Persistance.EFCore;
 using Application.Dtos.CommonDtos;
 using Application.Dtos.ProductDtos;
 using Application.Dtos.RoleDtos;
@@ -71,9 +72,9 @@ namespace Application.Features.ProductFeatures.Queries
         public class GetProductHandlerQuery : IRequestHandler<GetProductRequestQuery, ProductInfoDto>
         {
             private readonly IMapper _mapper;
-            private readonly IProductsRepository _ProductsRepository;
+            private readonly IProductDapperRepository _ProductsRepository;
 
-            public GetProductHandlerQuery(IProductsRepository ProductsRepository, IMapper mapper)
+            public GetProductHandlerQuery(IProductDapperRepository ProductsRepository, IMapper mapper)
             {
                 _ProductsRepository = ProductsRepository;
                 _mapper = mapper;
@@ -87,5 +88,31 @@ namespace Application.Features.ProductFeatures.Queries
             }
         }
         #endregion
+
+        #region GetAllDapper
+        public class GetAllProductRequestQuery : IRequest<IEnumerable<ProductInfoDto>>
+        {
+        
+        }
+        public class GetAllProductHandlerQuery : IRequestHandler<GetAllProductRequestQuery, IEnumerable<ProductInfoDto>>
+        {
+            private readonly IMapper _mapper;
+            private readonly IProductDapperRepository _ProductsRepository;
+
+            public GetAllProductHandlerQuery(IProductDapperRepository ProductsRepository, IMapper mapper)
+            {
+                _ProductsRepository = ProductsRepository;
+                _mapper = mapper;
+            }
+
+            public async Task<IEnumerable<ProductInfoDto>> Handle(GetAllProductRequestQuery request, CancellationToken cancellationToken)
+            {
+                var entity = await _ProductsRepository.GetAllAsync();
+                var ProductList = _mapper.Map<IEnumerable<ProductInfoDto>>(entity);
+                return ProductList;
+            }
+        }
+        #endregion
+
     }
 }

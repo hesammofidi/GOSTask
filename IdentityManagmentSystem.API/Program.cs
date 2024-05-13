@@ -1,10 +1,8 @@
 
 using Application;
-using Domain.Users;
 using Infrastructure;
 using Microsoft.OpenApi.Models;
 using Persistence;
-using Persistence.IdentityConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,17 +15,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigurePersistenceServices(builder.Configuration);
 builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 builder.Services.ConfigureApplicationServices();
-builder.Services.AddIdentityServices(builder.Configuration);
+//builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddAuthorization();
 
-builder.Services.ConfigureApplicationCookie(option =>
-{
-    option.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+//builder.Services.ConfigureApplicationCookie(option =>
+//{
+//    option.ExpireTimeSpan = TimeSpan.FromMinutes(10);
 
-    option.LoginPath = "/Account/login";
-    option.AccessDeniedPath = "/Account/AccessDenied";
-    option.SlidingExpiration = true;
-});
+//    option.LoginPath = "/Account/login";
+//    option.AccessDeniedPath = "/Account/AccessDenied";
+//    option.SlidingExpiration = true;
+//});
 
 //builder.Services.AddCors();
 

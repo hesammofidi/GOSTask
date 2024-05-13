@@ -1,11 +1,4 @@
-﻿using Application.Contract.Persistance.SystemsRolesManagment;
-using Application.Dtos.OrderProductDtos;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
 namespace Application.Dtos.OrderProductDtos.Validators
 {

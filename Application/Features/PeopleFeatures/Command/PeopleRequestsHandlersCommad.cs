@@ -1,6 +1,4 @@
-﻿using Application.Contract.Persistance.OrdersRolesManagment;
-using Application.Contract.Persistance.SystemsRolesManagment;
-using Application.Dtos.OrderProductDtos.Validators;
+﻿using Application.Contract.Persistance.EFCore;
 using Application.Dtos.PeopleDtos;
 using Application.Dtos.PeopleDtos.Validators;
 using Application.Responses;

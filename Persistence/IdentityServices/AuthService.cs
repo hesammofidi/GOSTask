@@ -1,6 +1,5 @@
 ﻿using Application.Constants;
 using Application.Contract.Identity;
-using Application.Contract.Persistance.SystemsRolesManagment;
 using Application.Models.Abstraction;
 using Application.Models.IdentityModels.UserModels;
 using Domain.Users;

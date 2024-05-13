@@ -5,12 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Persistence.IdentityConfig;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Contexts
 {
@@ -24,7 +18,6 @@ namespace Persistence.Contexts
         public DbSet<Orders> Orders { get; set; }
         public DbSet<Products> Products { get; set; }
         public DbSet<OrderProduct> OrderProduct { get; set; }
-        public DbSet<OrderPeople> OrderPeople { get; set; }
         public DbSet<People> People { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -37,7 +30,6 @@ namespace Persistence.Contexts
             builder.ApplyConfiguration(new ProductsConfigs());
             builder.ApplyConfiguration(new PeopleConfigs());
             builder.ApplyConfiguration(new OrderProductConfig());
-            builder.ApplyConfiguration(new OrderPeopleConfig());
             
 
             //EnitityTables

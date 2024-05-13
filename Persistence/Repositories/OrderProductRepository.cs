@@ -1,14 +1,12 @@
-﻿using Application.Contract.Persistance.OrdersRolesManagment;
-using Application.Models.Abstraction;
+﻿using Application.Contract.Persistance.EFCore;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Persistence.Contexts;
-using Persistence.Helpers;
 
 namespace Persistence.Repositories
 {
-    public class OrderProductRepository : GenericRepository<OrderProduct,int>, IOrderProductRepository
+    public class OrderProductRepository : GenericEFRepository<OrderProduct,int>, IOrderProductRepository
     {
         private readonly IdentityDatabaseContext _context;
         private readonly ILogger<OrderProductRepository> _logger;

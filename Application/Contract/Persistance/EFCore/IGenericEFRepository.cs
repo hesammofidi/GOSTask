@@ -1,6 +1,6 @@
 ﻿using Application.Models.Abstraction;
 using Domain.Primitives.Contract;
-namespace Application.Contract.Persistance
+namespace Application.Contract.Persistance.EFCore
 {
     public interface IGenericEFRepository<TEntity, TId>
           where TEntity : IEntity<TId>
