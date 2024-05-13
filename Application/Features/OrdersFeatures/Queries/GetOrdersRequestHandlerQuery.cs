@@ -1,4 +1,5 @@
-﻿using Application.Contract.Persistance.EFCore;
+﻿using Application.Contract.Persistance.Dapper;
+using Application.Contract.Persistance.EFCore;
 using Application.Dtos.CommonDtos;
 using Application.Dtos.OrderDtos;
 using Application.Models.Abstraction;
@@ -64,9 +65,9 @@ namespace Application.Features.OrdersFeatures.Queries
         public class GetOrdersHandlerQuery : IRequestHandler<GetOrdersRequestQuery, OrderInfoDto>
         {
             private readonly IMapper _mapper;
-            private readonly IOrdersRepository _OrdersRepository;
+            private readonly IOrderDapperRepository _OrdersRepository;
 
-            public GetOrdersHandlerQuery(IOrdersRepository OrdersRepository, IMapper mapper)
+            public GetOrdersHandlerQuery(IOrderDapperRepository OrdersRepository, IMapper mapper)
             {
                 _OrdersRepository = OrdersRepository;
                 _mapper = mapper;
@@ -76,6 +77,31 @@ namespace Application.Features.OrdersFeatures.Queries
             {
                 var entity = await _OrdersRepository.GetByIdAsync(request.OrderId);
                 var Order = _mapper.Map<OrderInfoDto>(entity);
+                return Order;
+            }
+        }
+        #endregion
+
+        #region GetById
+        public class GetAllOrdersRequestQuery : IRequest<IEnumerable<OrderInfoDto>>
+        {
+   
+        }
+        public class GetAllOrdersHandlerQuery : IRequestHandler<GetAllOrdersRequestQuery, IEnumerable<OrderInfoDto>>
+        {
+            private readonly IMapper _mapper;
+            private readonly IOrderDapperRepository _OrdersRepository;
+
+            public GetAllOrdersHandlerQuery(IOrderDapperRepository OrdersRepository, IMapper mapper)
+            {
+                _OrdersRepository = OrdersRepository;
+                _mapper = mapper;
+            }
+
+            public async Task<IEnumerable<OrderInfoDto>> Handle(GetAllOrdersRequestQuery request, CancellationToken cancellationToken)
+            {
+                var entity = await _OrdersRepository.GetAllAsync();
+                var Order = _mapper.Map<IEnumerable<OrderInfoDto>>(entity);
                 return Order;
             }
         }

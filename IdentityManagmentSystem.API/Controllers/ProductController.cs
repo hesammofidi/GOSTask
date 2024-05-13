@@ -24,7 +24,7 @@ namespace IdentityManagmentSystem.API.Controllers
             _ProductsRepository = ProductsRepository;
         }
         #region GetAllWithDapper
-        [HttpGet("GetAll")]
+        [HttpGet("GetAllDapper")]
         public async Task<ActionResult<IEnumerable<ProductInfoDto>>> GetAllProductsAsync()
         {
             var query = new GetAllProductRequestQuery { };

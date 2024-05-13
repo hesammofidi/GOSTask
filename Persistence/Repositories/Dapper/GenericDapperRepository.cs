@@ -22,7 +22,7 @@ namespace Persistence.Repositories.Dapper
             _connection = connection;
             _logger = logger;
         }
-        public async Task<TEntity?> GetByIdAsync(TId id)
+        public virtual async Task<TEntity?> GetByIdAsync(TId id)
         {
             string tableName = typeof(TEntity).Name;
             _logger.LogInformation($"Getting entity with ID {id} from {tableName}");
@@ -39,7 +39,7 @@ namespace Persistence.Repositories.Dapper
             return entity;
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             string tableName = typeof(TEntity).Name;
             _logger.LogInformation($"Getting all entities from {tableName}");

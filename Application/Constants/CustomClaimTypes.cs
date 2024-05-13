@@ -1,10 +1,4 @@
-﻿using Order;
-using Order.Collections.Generic;
-using Order.Linq;
-using Order.Text;
-using Order.Threading.Tasks;
-
-namespace Application.Constants
+﻿namespace Application.Constants
 {
     public static class CustomClaimTypes
     {

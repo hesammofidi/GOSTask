@@ -1,10 +1,14 @@
 ﻿using Application.Contract.Persistance.EFCore;
 using Application.Dtos.OrderDtos;
+using Application.Dtos.ProductDtos;
 using Application.Responses;
 using IdentityManagmentSystem.API.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Repositories;
 using static Application.Features.OrdersFeatures.Commands.OrderRequestsHandlersCommand;
+using static Application.Features.OrdersFeatures.Queries.GetOrdersRequestHandlerQuery;
+using static Application.Features.ProductFeatures.Queries.GetProductsRequestHandlerQuery;
 
 namespace IdentityManagmentOrder.API.Controllers
 {
@@ -19,7 +23,33 @@ namespace IdentityManagmentOrder.API.Controllers
             _OrdersRepository = OrdersRepository;
         }
 
-      
+        #region GetAllWithDapper
+        [HttpGet("GetAllDapper")]
+        public async Task<ActionResult<IEnumerable<OrderInfoDto>>> GetAllOrdersAsync()
+        {
+            var query = new GetAllOrdersRequestQuery { };
+            var response = await _mediator.Send(query);
+            return Ok(response);
+        }
+        #endregion
+
+        #region getbyIdDapper
+        [HttpGet("{id}")]
+        public async Task<ActionResult<OrderInfoDto>> GetOrderByIdAsync([FromRoute] int id)
+        {
+            var Product = await _OrdersRepository.Exist(id);
+
+            if (!Product)
+            {
+                return NotFound($"Invalid OrderId : {id}");
+            }
+
+            var OrderDto = await _mediator.Send(new GetOrdersRequestQuery { OrderId = id });
+
+            return Ok(OrderDto);
+        }
+        #endregion
+
         #region Add
         [HttpPost("Add")]
         public async Task<ActionResult<BaseCommandResponse>> AddOrder

@@ -1,15 +1,6 @@
-﻿using Application.Contract.Persistance;
-using Application.Models.Abstraction;
+﻿using Application.Models.Abstraction;
 using Application.Models.IdentityModels.UserModels;
-using Application.Responses;
-using Domain.Primitives.Contract;
 using Domain.Users;
-using Microsoft.AspNetCore.Identity;
-using Order;
-using Order.Collections.Generic;
-using Order.Linq;
-using Order.Text;
-using Order.Threading.Tasks;
 
 namespace Application.Contract.Identity
 {

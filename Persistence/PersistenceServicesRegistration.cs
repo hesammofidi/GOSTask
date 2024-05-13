@@ -1,4 +1,5 @@
 ﻿using Application.Contract.Identity;
+using Application.Contract.Persistance.Dapper;
 using Application.Contract.Persistance.EFCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
 using Persistence.IdentityConfig;
 using Persistence.Repositories;
+using Persistence.Repositories.Dapper;
 using System.Data;
 
 namespace Persistence
@@ -27,6 +29,8 @@ namespace Persistence
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IOrderProductRepository, OrderProductRepository>();
             services.AddScoped<IPeopleRepository, PeopleRepository>();
+            services.AddScoped<IProductDapperRepository, ProductDapperRepository>();
+            services.AddScoped<IOrderDapperRepository, OrdersDapperRepository>();
             return services;
         }
 

@@ -15,5 +15,6 @@ namespace Application.Dtos.OrderDtos
         public string? Description { get; set; }
         public string? Status { get; set; }
         public int PeopleId { get; set; }
+        public string? PeopleName { get; set; }
     }
 }

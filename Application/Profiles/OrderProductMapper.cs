@@ -11,6 +11,10 @@ namespace Application.Profiles
             CreateMap<OrderProduct, AddOrderProductDto>().ReverseMap();
             CreateMap<OrderProduct, EditOrderProductDto>().ReverseMap();
             CreateMap<OrderProduct, OrderProductDto>()
+                  .ForMember(SR => SR.ProductName, opt =>
+              opt.MapFrom(src => src.product.Title))
+            .ForMember(SR => SR.OrderTitle, opt =>
+              opt.MapFrom(src => src.Order.Title))
                 .ReverseMap();
         }
     }

@@ -10,7 +10,10 @@ namespace Application.Profiles
         {
             CreateMap<Orders, AddOrderDto>().ReverseMap();
             CreateMap<Orders, EditOrderDto>().ReverseMap();
-            CreateMap<Orders, OrderInfoDto>().ReverseMap();
+            CreateMap<Orders, OrderInfoDto>()
+                .ForMember(SR => SR.PeopleName, opt =>
+              opt.MapFrom(src => src.People.FullName))
+                .ReverseMap();
 
         }
     }
