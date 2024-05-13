@@ -4,6 +4,7 @@ using Application.Models.IdentityModels.UserModels;
 using Application.Responses;
 using Domain.Users;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -17,6 +18,7 @@ namespace IdentityManagmentSystem.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin")]
     public class UserInfoController : ControllerBase
     {
         private readonly IMediator _mediator;
