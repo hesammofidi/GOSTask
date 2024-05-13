@@ -23,9 +23,9 @@ namespace Persistence.Contexts
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //ApplyConfigs
-            builder.ApplyConfiguration(new RoleConfig());
-            builder.ApplyConfiguration(new UserConfig());
-            builder.ApplyConfiguration(new UserRoleConfig());
+            builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new UserRoleConfiguration());
             builder.ApplyConfiguration(new OrdersConfig());
             builder.ApplyConfiguration(new ProductsConfigs());
             builder.ApplyConfiguration(new PeopleConfigs());

@@ -31,6 +31,7 @@ namespace Persistence
             services.AddScoped<IPeopleRepository, PeopleRepository>();
             services.AddScoped<IProductDapperRepository, ProductDapperRepository>();
             services.AddScoped<IOrderDapperRepository, OrdersDapperRepository>();
+            services.AddScoped<IPeopleDapperRepository, PeopleDapperRepository>();
             return services;
         }
 

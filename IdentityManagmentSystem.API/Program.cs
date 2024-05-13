@@ -17,16 +17,6 @@ builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 builder.Services.ConfigureApplicationServices();
 //builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddAuthorization();
-
-//builder.Services.ConfigureApplicationCookie(option =>
-//{
-//    option.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-
-//    option.LoginPath = "/Account/login";
-//    option.AccessDeniedPath = "/Account/AccessDenied";
-//    option.SlidingExpiration = true;
-//});
-
 //builder.Services.AddCors();
 
 AddSwagger(builder.Services);

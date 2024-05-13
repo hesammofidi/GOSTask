@@ -17,19 +17,30 @@ namespace IdentityManagmentSystem.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IProductsRepository _ProductsRepository;
+        private readonly ILogger<ProductsController> _logger;
         public ProductsController(IMediator mediator,
-            IProductsRepository ProductsRepository)
+            IProductsRepository ProductsRepository,
+            ILogger<ProductsController> logger)
         {
             _mediator = mediator;
             _ProductsRepository = ProductsRepository;
+            _logger = logger;
         }
         #region GetAllWithDapper
         [HttpGet("GetAllDapper")]
         public async Task<ActionResult<IEnumerable<ProductInfoDto>>> GetAllProductsAsync()
         {
-            var query = new GetAllProductRequestQuery { };
-            var response = await _mediator.Send(query);
-            return Ok(response);
+            try
+            {
+                var query = new GetAllProductRequestQuery { };
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion 
 
@@ -61,16 +72,24 @@ namespace IdentityManagmentSystem.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductInfoDto>> GetProductByIdAsync([FromRoute] int id)
         {
-            var Product = await _ProductsRepository.Exist(id);
-
-            if (!Product)
+            try
             {
-                return NotFound($"Invalid ProductId : {id}");
+                var Product = await _ProductsRepository.Exist(id);
+
+                if (!Product)
+                {
+                    return NotFound($"Invalid ProductId : {id}");
+                }
+
+                var ProductDto = await _mediator.Send(new GetProductRequestQuery { ProductId = id });
+
+                return Ok(ProductDto);
             }
-
-            var ProductDto = await _mediator.Send(new GetProductRequestQuery { ProductId = id });
-
-            return Ok(ProductDto);
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -79,9 +98,18 @@ namespace IdentityManagmentSystem.API.Controllers
         public async Task<ActionResult<BaseCommandResponse>> AddProduct
          ([FromBody] AddProductDto data)
         {
-            var command = new AddProductRequestCommand { ProductDto = data };
-            var response = await _mediator.Send(command);
-            return Ok(response);
+            try
+            {
+                var command = new AddProductRequestCommand { ProductDto = data };
+                var commandResponse = await _mediator.Send(command);
+                return commandResponse.Success ? Ok(commandResponse) : StatusCode(400, commandResponse);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -90,18 +118,23 @@ namespace IdentityManagmentSystem.API.Controllers
         public async Task<ActionResult<BaseCommandResponse>>
           UpdateProduct([FromBody] EditProductDto data)
         {
-            if (data.Id == null)
+            try
             {
-                return BadRequest("ProductId is Null");
+                var product = await _ProductsRepository.Exist(data.Id);
+                if (!product)
+                {
+                    return NotFound("Product Not Found!");
+                }
+                var command = new EditProductRequestCommand { ProductDto = data };
+                var commandResponse = await _mediator.Send(command);
+                return commandResponse.Success ? Ok(commandResponse) : StatusCode(400, commandResponse);
+
             }
-            var user = await _ProductsRepository.Exist(data.Id);
-            if (!user)
+            catch (Exception ex)
             {
-                return NotFound("Product Not Found!");
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
             }
-            var command = new EditProductRequestCommand { ProductDto = data };
-            var response = await _mediator.Send(command);
-            return Ok(response);
         }
         #endregion
 
@@ -110,24 +143,22 @@ namespace IdentityManagmentSystem.API.Controllers
         public async Task<ActionResult>
        DeleteProduct( int id)
         {
-            if ( id == null)
-            {
-                return BadRequest("ProductId is Null");
-            }
-            var user = await _ProductsRepository.Exist( id);
-            if (user == null)
-            {
-                return NotFound("Product Not Found!");
-            }
+           
             try
             {
+                var ExistItem = await _ProductsRepository.Exist(id);
+                if (!ExistItem)
+                {
+                    return NotFound("Product Not Found!");
+                }
                 var command = new DeleteProductRequestCommand { ProductId = id };
                 await _mediator.Send(command);
                 return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest("Delete Request Fail");
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
             }
 
         }

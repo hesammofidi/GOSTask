@@ -3,6 +3,7 @@ using Application.Dtos.OrderDtos;
 using Application.Dtos.ProductDtos;
 using Application.Responses;
 using IdentityManagmentSystem.API.Abstraction;
+using IdentityManagmentSystem.API.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Repositories;
@@ -16,20 +17,31 @@ namespace IdentityManagmentOrder.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IOrdersRepository _OrdersRepository;
+        private readonly ILogger<OrdersController> _logger;
         public OrdersController(IMediator mediator,
-            IOrdersRepository OrdersRepository)
+            IOrdersRepository OrdersRepository,
+            ILogger<OrdersController> logger)
         {
             _mediator = mediator;
             _OrdersRepository = OrdersRepository;
+            _logger = logger;
         }
 
         #region GetAllWithDapper
         [HttpGet("GetAllDapper")]
         public async Task<ActionResult<IEnumerable<OrderInfoDto>>> GetAllOrdersAsync()
         {
-            var query = new GetAllOrdersRequestQuery { };
-            var response = await _mediator.Send(query);
-            return Ok(response);
+            try
+            {
+                var query = new GetAllOrdersRequestQuery { };
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -37,16 +49,24 @@ namespace IdentityManagmentOrder.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderInfoDto>> GetOrderByIdAsync([FromRoute] int id)
         {
-            var Product = await _OrdersRepository.Exist(id);
-
-            if (!Product)
+            try
             {
-                return NotFound($"Invalid OrderId : {id}");
+                var Order = await _OrdersRepository.Exist(id);
+
+                if (!Order)
+                {
+                    return NotFound($"Invalid OrderId : {id}");
+                }
+
+                var OrderDto = await _mediator.Send(new GetOrdersRequestQuery { OrderId = id });
+
+                return Ok(OrderDto);
             }
-
-            var OrderDto = await _mediator.Send(new GetOrdersRequestQuery { OrderId = id });
-
-            return Ok(OrderDto);
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -55,9 +75,17 @@ namespace IdentityManagmentOrder.API.Controllers
         public async Task<ActionResult<BaseCommandResponse>> AddOrder
          ([FromBody] AddOrderDto data)
         {
-            var command = new AddOrderRequestCommand { OrderDto = data };
-            var response = await _mediator.Send(command);
-            return Ok(response);
+            try
+            {
+                var command = new AddOrderRequestCommand { OrderDto = data };
+                var commandResponse = await _mediator.Send(command);
+                return commandResponse.Success ? Ok(commandResponse) : StatusCode(400, commandResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -66,46 +94,55 @@ namespace IdentityManagmentOrder.API.Controllers
         public async Task<ActionResult<BaseCommandResponse>>
           UpdateOrder([FromBody] EditOrderDto data)
         {
-            if (data.Id == null)
+            try
             {
-                return BadRequest("OrderId is Null");
+                var order = await _OrdersRepository.Exist(data.Id);
+                if (!order)
+                {
+                    return NotFound("Order Not Found!");
+                }
+                var command = new EditOrderRequestCommand { OrderDto = data };
+                var commandResponse = await _mediator.Send(command);
+                return commandResponse.Success ? Ok(commandResponse) : StatusCode(400, commandResponse);
+
             }
-            var user = await _OrdersRepository.Exist(data.Id);
-            if (!user)
+            catch (Exception ex)
             {
-                return NotFound("Order Not Found!");
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
             }
-            var command = new EditOrderRequestCommand { OrderDto = data };
-            var response = await _mediator.Send(command);
-            return Ok(response);
         }
         #endregion
 
         #region Delete
-        [HttpDelete("Delete")]
+        [HttpDelete("Delete/{deleteId}")]
         public async Task<ActionResult>
-       DeleteOrder([FromBody] int deleteId)
+       DeleteOrder(int deleteId)
         {
-            if (deleteId == null)
-            {
-                return BadRequest("OrderId is Null");
-            }
-            var user = await _OrdersRepository.Exist(deleteId);
-            if (user == null)
-            {
-                return NotFound("Order Not Found!");
-            }
             try
             {
-                var command = new DeleteOrderRequestCommand { Id = deleteId };
-                await _mediator.Send(command);
-                return Ok();
+                var order = await _OrdersRepository.Exist(deleteId);
+                if (!order)
+                {
+                    return NotFound("Order Not Found!");
+                }
+                try
+                {
+                    var command = new DeleteOrderRequestCommand { Id = deleteId };
+                    await _mediator.Send(command);
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"{ex}");
+                    return StatusCode(500);
+                }
             }
             catch (Exception ex)
             {
-                return BadRequest("Delete Request Fail");
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
             }
-
         }
         #endregion
     }

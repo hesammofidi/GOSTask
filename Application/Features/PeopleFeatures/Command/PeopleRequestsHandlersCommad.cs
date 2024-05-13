@@ -76,9 +76,9 @@ namespace Application.Features.PeopleFeatures.Command
                 }
                 else
                 {
-                    var OrderInfo = await _peopleRepository.GetByIdAsync(request.editSpDto.Id);
-                    _mapper.Map(OrderInfo, request.editSpDto);
-                    await _peopleRepository.UpdateAsync(OrderInfo);
+                    var PeopleInfo = await _peopleRepository.GetByIdAsync(request.editSpDto.Id);
+                    _mapper.Map( request.editSpDto, PeopleInfo);
+                    await _peopleRepository.UpdateAsync(PeopleInfo);
                     response.Success = true;
                     response.Message = "Edit Successful";
                 }

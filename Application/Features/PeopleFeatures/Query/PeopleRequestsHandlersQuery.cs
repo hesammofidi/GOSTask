@@ -1,4 +1,5 @@
-﻿using Application.Contract.Persistance.EFCore;
+﻿using Application.Contract.Persistance.Dapper;
+using Application.Contract.Persistance.EFCore;
 using Application.Dtos.CommonDtos;
 using Application.Dtos.PeopleDtos;
 using Application.Models.Abstraction;
@@ -15,26 +16,26 @@ namespace Application.Features.PeopleFeatures.Query
         {
             public FilterDataDto? FilterDataDto { get; set; }
         }
-        public class SPFilterQueryHandler : IRequestHandler<PeopleFilterQueryRequest, PagedList<PeopleDto>>
+        public class PeopleFilterQueryHandler : IRequestHandler<PeopleFilterQueryRequest, PagedList<PeopleDto>>
         {
             private readonly IMapper _mapper;
-            private readonly IPeopleRepository _OrderProductsRepository;
-            public SPFilterQueryHandler(IMapper mapper, IPeopleRepository OrderProductsRepository)
+            private readonly IPeopleRepository _peopleRepository;
+            public PeopleFilterQueryHandler(IMapper mapper, IPeopleRepository peopleRepository)
             {
                 _mapper = mapper;
-                _OrderProductsRepository = OrderProductsRepository;
+                _peopleRepository = peopleRepository;
             }
             public async Task<PagedList<PeopleDto>> Handle(PeopleFilterQueryRequest request, CancellationToken cancellationToken)
             {
                 var filterdata = _mapper.Map<FilterData>(request.FilterDataDto);
-                var OrderProduct = await _OrderProductsRepository.FilterAsync(filterdata);
-                var OrderProductItems = _mapper.Map<List<PeopleDto>>(OrderProduct.Items);
+                var People = await _peopleRepository.FilterAsync(filterdata);
+                var PeopleItems = _mapper.Map<List<PeopleDto>>(People.Items);
                 return new PagedList<PeopleDto>
                     (
-                    OrderProductItems,
-                    OrderProduct.Paging.PageSize,
-                    OrderProduct.Paging.CurrentPage,
-                    OrderProduct.Paging.TotalRecordCount
+                    PeopleItems,
+                    People.Paging.PageSize,
+                    People.Paging.CurrentPage,
+                    People.Paging.TotalRecordCount
                     );
 
             }
@@ -50,23 +51,23 @@ namespace Application.Features.PeopleFeatures.Query
         public class PeopleSearchQueryHandler : IRequestHandler<PeopleSearchQueryRequest, PagedList<PeopleDto>>
         {
             private readonly IMapper _mapper;
-            private readonly IPeopleRepository _OrderProductsRepository;
-            public PeopleSearchQueryHandler(IMapper mapper, IPeopleRepository OrderProductsRepository)
+            private readonly IPeopleRepository _peopleRepository;
+            public PeopleSearchQueryHandler(IMapper mapper, IPeopleRepository peopleRepository)
             {
                 _mapper = mapper;
-                _OrderProductsRepository = OrderProductsRepository;
+                _peopleRepository = peopleRepository;
             }
             public async Task<PagedList<PeopleDto>> Handle(PeopleSearchQueryRequest request, CancellationToken cancellationToken)
             {
                 var searchdata = _mapper.Map<SearchData>(request.SearchDataDto);
-                var OrderProduct = await _OrderProductsRepository.SearchAsync(searchdata);
-                var OrderProductItems = _mapper.Map<List<PeopleDto>>(OrderProduct.Items);
+                var People = await _peopleRepository.SearchAsync(searchdata);
+                var PeopleItems = _mapper.Map<List<PeopleDto>>(People.Items);
                 return new PagedList<PeopleDto>
                     (
-                    OrderProductItems,
-                    OrderProduct.Paging.PageSize,
-                    OrderProduct.Paging.CurrentPage,
-                    OrderProduct.Paging.TotalRecordCount
+                    PeopleItems,
+                    People.Paging.PageSize,
+                    People.Paging.CurrentPage,
+                    People.Paging.TotalRecordCount
                     );
 
             }
@@ -77,24 +78,49 @@ namespace Application.Features.PeopleFeatures.Query
         #region GetById
         public class GetPeopleRequestQuery : IRequest<PeopleDto>
         {
-            public int SPId { get; set; }
+            public int PeopleId { get; set; }
         }
-        public class PeopleHandlerQuery : IRequestHandler<GetPeopleRequestQuery, PeopleDto>
+        public class GetPeopleHandlerQuery : IRequestHandler<GetPeopleRequestQuery, PeopleDto>
         {
             private readonly IMapper _mapper;
-            private readonly IPeopleRepository _OrderProductsRepository;
+            private readonly IPeopleDapperRepository _peopleRepository;
 
-            public PeopleHandlerQuery(IPeopleRepository OrderProductsRepository, IMapper mapper)
+            public GetPeopleHandlerQuery(IPeopleDapperRepository peopleRepository, IMapper mapper)
             {
-                _OrderProductsRepository = OrderProductsRepository;
+                _peopleRepository = peopleRepository;
                 _mapper = mapper;
             }
 
             public async Task<PeopleDto> Handle(GetPeopleRequestQuery request, CancellationToken cancellationToken)
             {
-                var entity = await _OrderProductsRepository.GetByIdAsync(request.SPId);
+                var entity = await _peopleRepository.GetByIdAsync(request.PeopleId);
                 var Orderrp = _mapper.Map<PeopleDto>(entity);
                 return Orderrp;
+            }
+        }
+        #endregion
+
+        #region GetAll
+        public class GetAllPeopleRequestQuery : IRequest<IEnumerable<PeopleDto>>
+        {
+          
+        }
+        public class GetAllPeopleHandlerQuery : IRequestHandler<GetAllPeopleRequestQuery, IEnumerable<PeopleDto>>
+        {
+            private readonly IMapper _mapper;
+            private readonly IPeopleDapperRepository _peopleRepository;
+
+            public GetAllPeopleHandlerQuery(IPeopleDapperRepository peopleRepository, IMapper mapper)
+            {
+                _peopleRepository = peopleRepository;
+                _mapper = mapper;
+            }
+
+            public async Task<IEnumerable<PeopleDto>> Handle(GetAllPeopleRequestQuery request, CancellationToken cancellationToken)
+            {
+                var entity = await _peopleRepository.GetAllAsync();
+                var People = _mapper.Map<IEnumerable<PeopleDto>>(entity);
+                return People;
             }
         }
         #endregion

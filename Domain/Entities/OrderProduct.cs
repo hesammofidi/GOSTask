@@ -12,7 +12,7 @@ namespace Domain.Entities
     {
 
         public Products? product { get; set; }
-        public string? ProductId { get; set; }
+        public int ProductId { get; set; }
         public Orders? Order { get; set; }
         public int OrderId { get; set; }
     }

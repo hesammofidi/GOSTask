@@ -15,32 +15,51 @@ namespace IdentityManagmentSystem.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IOrderProductRepository _orderProductRepository;
-        public OrderProductController(IMediator mediator, IOrderProductRepository orderProductRepository)
+        private readonly ILogger<OrderProductController> _logger;
+        public OrderProductController(
+            IMediator mediator, 
+            IOrderProductRepository orderProductRepository, 
+            ILogger<OrderProductController> logger)
         {
             _mediator = mediator;
             _orderProductRepository = orderProductRepository;
+            _logger = logger;
         }
         #region FilterSearch
         [HttpGet("filter")]
         public async Task<ActionResult<IEnumerable<OrderProductDto>>> FilterSRAsync(
             [FromQuery] FilterDataDto data)
         {
-            var query = new OrderProductFilterQueryRequest { FilterDataDto = data };
-            var response = await _mediator.Send(query);
-            Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
-
-            return Ok(response.Items);
+            try
+            {
+                var query = new OrderProductFilterQueryRequest { FilterDataDto = data };
+                var response = await _mediator.Send(query);
+                Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
+                return Ok(response.Items);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
 
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<OrderProductDto>>> SearchSRAsync(
           [FromQuery] SearchDataDto data)
         {
-            var query = new OrderProductSerchQueryRequest { SearchDataDto = data };
-            var response = await _mediator.Send(query);
-            Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
-
-            return Ok(response.Items);
+            try
+            {
+                var query = new OrderProductSerchQueryRequest { SearchDataDto = data };
+                var response = await _mediator.Send(query);
+                Response.Headers.Add("X-PagingData", JsonSerializer.Serialize(response.Paging));
+                return Ok(response.Items);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -48,16 +67,25 @@ namespace IdentityManagmentSystem.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderProductDto>> GetSRByIdAsync([FromRoute] int id)
         {
-            var OrderProduct = await _orderProductRepository.Exist(id);
-
-            if (!OrderProduct)
+            try
             {
-                return NotFound($"Invalid Id : {id}");
+
+                var OrderProduct = await _orderProductRepository.Exist(id);
+
+                if (!OrderProduct)
+                {
+                    return NotFound($"Invalid Id : {id}");
+                }
+
+                var OrderProductDto = await _mediator.Send(new GetOrderProductRequestQuery { SRId = id });
+
+                return Ok(OrderProductDto);
             }
-
-            var OrderProductDto = await _mediator.Send(new GetOrderProductRequestQuery { SRId = id });
-
-            return Ok(OrderProductDto);
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -66,9 +94,17 @@ namespace IdentityManagmentSystem.API.Controllers
         public async Task<ActionResult<BaseCommandResponse>> AddOrderProduct
          ([FromBody] AddOrderProductDto data)
         {
-            var command = new AddOrderProductRequestCommand { addSRDto = data };
-            var commandResponse = await _mediator.Send(command);
-            return commandResponse.Success ? Ok(commandResponse) : StatusCode(400, commandResponse);
+            try
+            {
+                var command = new AddOrderProductRequestCommand { addSRDto = data };
+                var commandResponse = await _mediator.Send(command);
+                return commandResponse.Success ? Ok(commandResponse) : StatusCode(400, commandResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -77,9 +113,17 @@ namespace IdentityManagmentSystem.API.Controllers
         public async Task<ActionResult<BaseCommandResponse>>
           UpdateOrderProduct([FromBody] EditOrderProductDto data)
         {
-            var command = new EditOrderProductRequestCommand { ediSRDto = data };
-            var commandResponse = await _mediator.Send(command);
-            return commandResponse.Success ? Ok(commandResponse) : StatusCode(400, commandResponse);
+            try
+            {
+                var command = new EditOrderProductRequestCommand { ediSRDto = data };
+                var commandResponse = await _mediator.Send(command);
+                return commandResponse.Success ? Ok(commandResponse) : StatusCode(400, commandResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -88,21 +132,23 @@ namespace IdentityManagmentSystem.API.Controllers
         public async Task<ActionResult>
        DeleteOrderProduct(int deleteId)
         {
-           
-            var entity = await _orderProductRepository.Exist(deleteId);
-            if (!entity)
-            {
-                return NotFound("OP Not Found!");
-            }
+          
             try
             {
+
+                var entity = await _orderProductRepository.Exist(deleteId);
+                if (!entity)
+                {
+                    return NotFound("OP Not Found!");
+                }
                 var command = new DeleteOrderProductRequestCommand { Id = deleteId };
                 await _mediator.Send(command);
                 return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest("Delete Request Fail");
+                _logger.LogError($"{ex}");
+                return StatusCode(500);
             }
 
         }

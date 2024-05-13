@@ -11,7 +11,7 @@ namespace Application.Features.OrderProduFeatures.Commands
     public class OrderProductCommandsRequestsHandlers
     {
 
-        #region AddSR
+        #region Add
         public class AddOrderProductRequestCommand : IRequest<BaseCommandResponse>
         {
             public AddOrderProductDto? addSRDto { get; set; }
@@ -49,7 +49,7 @@ namespace Application.Features.OrderProduFeatures.Commands
         }
         #endregion
 
-        #region Editsr
+        #region Edit
         public class EditOrderProductRequestCommand : IRequest<BaseCommandResponse>
         {
             public EditOrderProductDto? ediSRDto { get; set; }
@@ -77,9 +77,9 @@ namespace Application.Features.OrderProduFeatures.Commands
                 }
                 else
                 {
-                    var systemInfo = await _OrderProductRepository.GetByIdAsync(request.ediSRDto.Id);
-                    _mapper.Map(systemInfo, request.ediSRDto);
-                    await _OrderProductRepository.UpdateAsync(systemInfo);
+                    var orderProduct = await _OrderProductRepository.GetByIdAsync(request.ediSRDto.Id);
+                    _mapper.Map(request.ediSRDto, orderProduct);
+                    await _OrderProductRepository.UpdateAsync(orderProduct);
                     response.Success = true;
                     response.Message = "Edit Successful";
                 }
